@@ -1,30 +1,37 @@
-<div class="container-fluid">
-  <mat-sidenav-container>
-    <mat-sidenav mode='over' opened='true' #sidenav>
-      <mat-nav-list>
-        <mat-list-item>
-          <a matLine routerLinkActive="active-link" routerLink="/profile">Profile
-            <button mat-icon-button class="sidenav-profile">
-              <mat-icon>perm_identity</mat-icon>
-            </button>
-          </a>
-        </mat-list-item>
-        <mat-list-item>
-          <a matLine routerLinkActive="active-link" [routerLink]="['/org',43]">Organization
-            <button mat-icon-button class="sidenav-projects">
-              <mat-icon>work</mat-icon>
-            </button>
-          </a>
-        </mat-list-item>
-      </mat-nav-list>
+<mat-sidenav-container>
+  <mat-sidenav mode='push' opened='true' #sidenav>
+    <mat-nav-list>
+      <mat-list-item>
+        <a matLine routerLinkActive="active-link" routerLink="/profile">Profile
+          <button mat-icon-button class="sidenav-profile">
+            <mat-icon>perm_identity</mat-icon>
+          </button>
+        </a>
+      </mat-list-item>
+      <mat-list-item>
+        <a matLine routerLinkActive="active-link" [routerLink]="['/org',43]">Organization
+          <button mat-icon-button class="sidenav-projects">
+            <mat-icon>work</mat-icon>
+          </button>
+        </a>
+      </mat-list-item>
+    </mat-nav-list>
 
-      <ul>
-      </ul>
-    </mat-sidenav>
-    <div class="container">
+    <ul>
+    </ul>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="container site-content">
+      <div class="row">
+        <div class="col-xs-12">
+          <button md-mini-fab class="example-fab pull-right" (click)="sidenav.toggle()">
+            <md-icon>toggle sidebar</md-icon>
+          </button>
+        </div>
+      </div>
       <div class="row">
         <router-outlet></router-outlet>
       </div>
     </div>
-  </mat-sidenav-container>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

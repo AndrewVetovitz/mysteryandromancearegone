@@ -11,6 +11,10 @@ mat-sidenav {
   width: 200px;
 }
 
+.site-content {
+  margin: 0 0 0 1em !important;
+}
+
 .sidenav-projects.mat-icon-button {
   margin: 0 0 0 30px;
 }
