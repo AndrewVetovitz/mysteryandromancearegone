@@ -1,3 +1,17 @@
 <p>
   org works!
 </p>
+<p>
+  {{(org | async)?.name}}
+</p>
+
+<div *ngFor="let user of users | async">
+  <p>
+    <img style="height:40px;width:40px;float:left" [src]="user.data.photoURL">
+    {{ user.data.displayName }} : {{user.data.email}}
+  </p>
+</div>
+<div>
+  <h2>Add team members</h2>
+  <input type="text" [(ngModel)]="newMemberEmail">
+</div>
