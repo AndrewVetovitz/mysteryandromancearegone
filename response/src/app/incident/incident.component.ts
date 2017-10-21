@@ -3,6 +3,8 @@ import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from "@angular/router";
 import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
+import {Org} from "../org/org.component";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-incident',
@@ -22,7 +24,10 @@ export class IncidentComponent implements OnInit {
 
   id;
 
-  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore) { }
+  incident;
+  org: Observable<Org>;
+
+  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id'); //Use for specific keys later
@@ -30,7 +35,14 @@ export class IncidentComponent implements OnInit {
     this.items = this.itemsRef.snapshotChanges().map(changes => {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });
+
+    this.incident = this.db.object('incidents/' + this.id );
+    this.incident.valueChanges().subscribe(doc => {
+      this.org = this.afs.doc('org/' + doc.orgId).valueChanges();
+
+    })
   }
+
 
   mapClicked($event: any) {
     this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
