@@ -13,7 +13,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
 import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
-import { AuthService } from "./auth.service";
+import { AuthService } from './auth.service';
 
 const routes: Routes = [
   {
@@ -34,6 +34,10 @@ const routes: Routes = [
   }
 ];
 
+// Angular Material Modules
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInputModule, MatDialogModule, MatCardModule, MatSelectModule } from '@angular/material';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,8 +55,17 @@ const routes: Routes = [
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule,
     AgmCoreModule.forRoot({
-      apiKey:'AIzaSyCfR8zGUSeNFqXyjupxcLNAMJDXTmxZBq0'
-    })
+      apiKey: 'AIzaSyCfR8zGUSeNFqXyjupxcLNAMJDXTmxZBq0'
+    }),
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
+    MatListModule,
+    MatInputModule,
+    MatDialogModule,
+    MatCardModule,
+    MatSelectModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

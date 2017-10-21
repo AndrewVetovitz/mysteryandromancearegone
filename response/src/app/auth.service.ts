@@ -9,6 +9,7 @@ import "rxjs/add/observable/of";
 export interface User {
   uid: string;
   email: string;
+  OrgIds: any;
   photoURL?: string;
   displayName?: string;
 }
@@ -47,8 +48,9 @@ export class AuthService {
     const data: User = {
       uid: user.uid,
       email: user.email,
+      OrgIds: user.OrgIds,
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
     };
     return userRef.set(data)
   }

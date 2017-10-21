@@ -1,3 +1,57 @@
 <p>
   org works!
 </p>
+<p>
+  {{(org | async)?.name}}
+</p>
+
+<div *ngFor="let user of users | async">
+  <p>
+    <img style="height:40px;width:40px;float:left" [src]="user.data.photoURL">
+    {{ user.data.displayName }} : {{user.data.email}}
+  </p>
+</div>
+<div>
+  <h2>Add team members</h2>
+  <input type="text" [(ngModel)]="newMemberEmail">
+</div>
+<h3>
+  Teams
+</h3>
+<div>
+  <div *ngFor="let team of teams; let i = index;">
+    <p>
+      {{team.name}}
+    </p>
+    <div *ngFor="let pintext of team.premadePins">
+      <p>
+        {{pintext}}
+      </p>
+    </div>
+    <button (click)="addPinIndex = i"> add new pin quick text</button>
+    <div *ngIf="addPinIndex == i">
+      <input type="text" [(ngModel)]="newPin">
+      <button (click)="addPin(newPin, i); newPin=''; addPinIndex = -1;">add pin</button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <h3>Add New Team</h3>
+  <input type="text" [(ngModel)]="newTeamName">
+  <button (click)="addTeam(newTeamName)">add new team</button>
+</div>
+
+<div>
+  <h3> add New Incident</h3>
+  <input type="text" [(ngModel)]="newIncident">
+  <button (click)="addIncident(newIncident)">add new Incident</button>
+</div>
+<div>
+  <h3> Current Incidents</h3>
+  <div *ngFor="let incident of incidents | async">
+    <p>
+      {{incident.name}}
+    </p>
+  </div>
+</div>
