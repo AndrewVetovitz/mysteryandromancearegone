@@ -13,7 +13,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
 import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
-import {AuthService} from "./auth.service";
+import { AuthService } from "./auth.service";
 
 const routes: Routes = [
   {
