@@ -35,7 +35,7 @@ const routes: Routes = [
 
 // Angular Material Modules
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule } from '@angular/material';
+import { MatSidenavModule, MatIconModule, MatIconRegistry, MatButtonModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,10 @@ import { MatSidenavModule } from '@angular/material';
       apiKey:'AIzaSyCfR8zGUSeNFqXyjupxcLNAMJDXTmxZBq0'
     }),
     BrowserAnimationsModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatIconModule,
+    MatIconRegistry,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
