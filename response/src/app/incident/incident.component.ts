@@ -3,6 +3,7 @@ import { AngularFirestore } from "angularfire2/firestore";
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from "@angular/router";
 import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
+import { GoogleMapsAPIWrapper } from "@agm/core";
 
 @Component({
   selector: 'app-incident',
@@ -24,9 +25,12 @@ export class IncidentComponent implements OnInit {
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
 
-  id;
+  map: any;
+  drawingManager: any;
 
-  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore) {
+  id: any;
+
+  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, private gmapi: GoogleMapsAPIWrapper) {
     this.mode = 0;
   }
 
@@ -37,22 +41,46 @@ export class IncidentComponent implements OnInit {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });
 
-    this.paths = [[
-       { lat: 0,  lng: 10 },
-       { lat: 0,  lng: 20 },
-       { lat: 10, lng: 20 },
-       { lat: 10, lng: 10 },
-       { lat: 0,  lng: 10 }
-      ]]
+    this.gmapi.getNativeMap().then(map => {
+      this.drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.POLYGON,
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: ['polygon']
+        }
+      });
+    });
+
+    this.drawingManager.setMap(this.map);
+    google.maps.event.addListener(this.drawingManager, 'overlaycomplete', (event) => {
+      // Polygon drawn
+      if (event.type === google.maps.drawing.OverlayType.POLYGON) {
+        //this is the coordinate, you can assign it to a variable or pass into another function.
+        alert(event.overlay.getPath().getArray());
+      }
+    });
   }
 
+
+
+
+
   mapClicked($event: any) {
+    let point = {lat: $event.coords.lat, lng: $event.coords.lng, draggable: true};
+
     switch(this.mode) {
       case 0: {
-        this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
+        this.addItem(point);
       }
       case 1: {
-        this.paths[this.paths.length - 1].push({lat: $event.coords.lat, lng: $event.coords.lng});
+        if(this.paths[this.paths.length - 1].length === 0){
+          this.paths[this.paths.length - 1].push(point);
+          this.paths[this.paths.length - 1].push(point);
+        } else {
+          this.paths[this.paths.length - 1].splice(this.paths[this.paths.length - 1].length - 1, 0, point);
+        }
+
         console.log(this.paths);
       }
     }
