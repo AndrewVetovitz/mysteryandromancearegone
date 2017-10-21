@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+body {
+  background-color: #eee;
+  color:rgba(0,0,0,.87);
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
+  overflow: auto;
+  fill: currentColor;
+  height: 100%;
+  width: 100%;
+}

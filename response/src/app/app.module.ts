@@ -7,7 +7,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../environments/environment';
-import {AgmCoreModule} from '@agm/core';
+import { AgmCoreModule } from '@agm/core';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
@@ -35,7 +35,7 @@ const routes: Routes = [
 
 // Angular Material Modules
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule, MatIconModule, MatIconRegistry, MatButtonModule } from '@angular/material';
+import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInputModule, MatDialogModule, MatCardModule, MatSelectModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -59,8 +59,12 @@ import { MatSidenavModule, MatIconModule, MatIconRegistry, MatButtonModule } fro
     BrowserAnimationsModule,
     MatSidenavModule,
     MatIconModule,
-    MatIconRegistry,
-    MatButtonModule
+    MatButtonModule,
+    MatListModule,
+    MatInputModule,
+    MatDialogModule,
+    MatCardModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
