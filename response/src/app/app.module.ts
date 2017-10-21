@@ -9,6 +9,29 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../environments/environment';
 import {AgmCoreModule} from '@agm/core';
 import { AppComponent } from './app.component';
+import { RouterModule, Routes } from '@angular/router';
+import { OrgComponent } from './org/org.component';
+import { ProfileComponent } from './profile/profile.component';
+import { IncidentComponent } from './incident/incident.component';
+
+const routes: Routes = [
+  {
+    path: 'org/:id',
+    component: OrgComponent,
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
+  },
+  {
+    path: 'incident/:id',
+    component: IncidentComponent
+  },
+  {
+    path: '**',
+    component: ProfileComponent
+  }
+];
 
 // Angular Material Modules
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,12 +39,16 @@ import { MatSidenavModule } from '@angular/material';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    OrgComponent,
+    ProfileComponent,
+    IncidentComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
