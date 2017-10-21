@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from "@angular/router";
@@ -12,8 +12,10 @@ import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
 export class IncidentComponent implements OnInit {
   // Name and start point of the map
   title: string = 'My first AGM project';
-  latitude: number = 51.673858;
-  longitude: number = 7.815982;
+  lat: number = 51.678418;
+  lng: number = 7.809007;
+  origin: string = '75 9th Ave, New York, NY';
+  destination: string = '715 Wedgewood Dr. Marysville, OH';
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
