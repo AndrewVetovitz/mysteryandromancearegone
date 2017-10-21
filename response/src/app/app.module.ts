@@ -7,7 +7,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../environments/environment';
-import {AgmCoreModule} from "@agm/core";
+import { AgmCoreModule } from "@agm/core";
 import { AppComponent } from './app.component';
 
 @NgModule({
