@@ -1,5 +1,5 @@
 mat-sidenav-container {
-  margin: 0 0 0 -15px;
+  margin: 0;
   position: fixed;
   height: 100%;
   min-height: 100%;
@@ -12,7 +12,8 @@ mat-sidenav {
 }
 
 .site-content {
-  margin: 0 0 0 1em !important;
+  margin: 0 0 0 4em !important;
+  padding: 0;
 }
 
 .sidenav-projects.mat-icon-button {

@@ -1,0 +1,17 @@
+
+.add-member {
+  background-color: #448aff;
+}
+
+.members {
+  margin-bottom: 1em;
+}
+
+mat-card-footer {
+  margin-bottom: .5em;
+}
+
+
+.row.col-xs-6.org-left-pane {
+  margin-right: 2em;
+}

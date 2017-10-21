@@ -36,7 +36,8 @@ const routes: Routes = [
 
 // Angular Material Modules
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInputModule, MatDialogModule, MatCardModule, MatSelectModule } from '@angular/material';
+import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInputModule, MatDialogModule, MatCardModule, MatSelectModule,
+         MatTableModule, MatExpansionModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,10 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     MatInputModule,
     MatDialogModule,
     MatCardModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule,
+    MatTableModule,
+    MatExpansionModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

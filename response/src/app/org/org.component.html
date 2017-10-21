@@ -1,17 +1,86 @@
-<p>
-  org works!
-</p>
-<p>
-  {{(org | async)?.name}}
-</p>
+<div class="row col-xs-6 org-left-pane">
+  <div class="row">
+    <mat-card class="col-xs-12">
+      <mat-card-title>
+        {{(org | async)?.name}}
+      </mat-card-title>
+      <mat-card-content>
+        NAME GOES HERE
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-<div *ngFor="let user of users | async">
-  <p>
-    <img style="height:40px;width:40px;float:left" [src]="user.data.photoURL">
-    {{ user.data.displayName }} : {{user.data.email}}
-  </p>
+  <div class="row">
+    <mat-card class="clearfix">
+      <mat-card-title>
+        Members
+      </mat-card-title>
+
+      <mat-card-content *ngFor="let user of users | async" class="col-xs-12 members">
+        <img style="height:40px;width:40px;float:left" [src]="user.data.photoURL">
+        {{ user.data.displayName }} : {{user.data.email}}
+      </mat-card-content>
+
+      <mat-card-footer>
+        <button mat-button class="add-member col-xs-12">
+          <mat-icon aria-label="Add Team Member">add_circle</mat-icon>
+          Add Member
+        </button>
+        <div>
+          <mat-form-field class="col-xs-6">
+            <input matInput placeholder="New Member">
+          </mat-form-field>
+          <div class="col-xs-6">
+            <button mat-icon-button>
+              <mat-icon>done</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon>clear</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card-footer>
+
+    </mat-card>
+  </div>
+
+  <div class="row">
+    <mat-expansion-panel>
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Custom Drop-pins
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-form-field class="col-xs-6">
+        <input matInput placeholder="Description">
+      </mat-form-field>
+      <div class="col-xs-6">
+        <button mat-icon-button>
+          <mat-icon>done</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>Add team members</h2>
+      <input type="text" [(ngModel)]="newMemberEmail">
+    </div>
+  </div>
 </div>
-<div>
-  <h2>Add team members</h2>
-  <input type="text" [(ngModel)]="newMemberEmail">
+
+<div class="row col-xs-6">
+  <div class="row">
+    <mat-card class="clearfix">
+      <mat-card-title>
+        Current Incidents
+      </mat-card-title>
+    </mat-card>
+  </div>
 </div>

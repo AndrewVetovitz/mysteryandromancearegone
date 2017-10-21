@@ -4,7 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-import "rxjs/add/observable/of";
+import 'rxjs/add/observable/of';
 
 export interface User {
   uid: string;
@@ -19,16 +19,16 @@ export class AuthService {
   user: Observable<User>;
 
   constructor(private afAuth: AngularFireAuth,
-              private afs: AngularFirestore,) {
+              private afs: AngularFirestore) {
 
     this.user = this.afAuth.authState
       .switchMap(user => {
         if (user) {
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
         } else {
-          return Observable.of(null)
+          return Observable.of(null);
         }
-      })
+      });
   }
 
   googleLogin() {

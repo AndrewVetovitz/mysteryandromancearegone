@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
 body {
+  margin: 0;
   background-color: #eee;
   color:rgba(0,0,0,.87);
   font-family: 'Lato', Helvetica, Arial, sans-serif;
@@ -10,4 +11,8 @@ body {
   fill: currentColor;
   height: 100%;
   width: 100%;
+}
+
+.row {
+  margin-bottom: 1em;
 }
