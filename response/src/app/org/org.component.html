@@ -8,7 +8,7 @@
 <div *ngFor="let user of users | async">
   <p>
     <img style="height:40px;width:40px;float:left" [src]="user.data.photoURL">
-    {{ user.data.displayName }} : {{user.data.email}}
+    {{ user.data.displayName }} : {{user.data.email}} : {{user.data.OrgIds[id]}}
   </p>
 </div>
 <div>

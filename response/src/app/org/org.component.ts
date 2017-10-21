@@ -42,6 +42,8 @@ export class OrgComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id');
+
     let size = new BehaviorSubject(null);
 
     this.incidents = size.switchMap(size =>
@@ -49,11 +51,10 @@ export class OrgComponent implements OnInit {
       ).snapshotChanges()
     );
 
-    this.id = this.route.snapshot.paramMap.get('id');
     this.orgRef = this.afs.doc<Org>('org/' + this.id);
     this.org = this.orgRef.valueChanges();
     this.org.subscribe(res => { console.log(res); this.orgCopy = res; this.teams = res.teams});
-    let usersQ = this.afs.collection('users', ref => ref.where('OrgIds.' + this.id,'==',true));
+    let usersQ = this.afs.collection('users', ref => ref.where('OrgIds.' + this.id,'>=',''));
     this.users = usersQ.snapshotChanges().map(actions => {
       return actions.map(a => {
         const data = a.payload.doc.data();
