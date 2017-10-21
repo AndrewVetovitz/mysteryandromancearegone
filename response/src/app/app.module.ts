@@ -7,12 +7,13 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../environments/environment';
-import {AgmCoreModule} from '@agm/core';
+import { AgmCoreModule } from "@agm/core";
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
 import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
+import {AuthService} from "./auth.service";
 
 const routes: Routes = [
   {
@@ -33,10 +34,6 @@ const routes: Routes = [
   }
 ];
 
-// Angular Material Modules
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule, MatIconModule, MatIconRegistry, MatButtonModule } from '@angular/material';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,14 +52,9 @@ import { MatSidenavModule, MatIconModule, MatIconRegistry, MatButtonModule } fro
     AngularFireDatabaseModule,
     AgmCoreModule.forRoot({
       apiKey:'AIzaSyCfR8zGUSeNFqXyjupxcLNAMJDXTmxZBq0'
-    }),
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatIconRegistry,
-    MatButtonModule
+    })
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
