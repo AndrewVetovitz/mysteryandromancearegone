@@ -10,6 +10,7 @@ import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
   styleUrls: ['./incident.component.css']
 })
 export class IncidentComponent implements OnInit {
+  // Name and start point of the map
   title: string = 'My first AGM project';
   latitude: number = 51.673858;
   longitude: number = 7.815982;
@@ -20,13 +21,10 @@ export class IncidentComponent implements OnInit {
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore) { }
 
   ngOnInit() {
-    let id = this.route.snapshot.paramMap.get('id');
+    // let id = this.route.snapshot.paramMap.get('id'); Use for specific keys later
     this.itemsRef = this.db.list('incidents/markers');
-    console.log(this.itemsRef);
     this.items = this.itemsRef.snapshotChanges().map(changes => {
-      let test = changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-      console.log(test);
-      return test;
+      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });
   }
 
