@@ -7,8 +7,12 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../environments/environment';
-import {AgmCoreModule} from "@agm/core";
+import {AgmCoreModule} from '@agm/core';
 import { AppComponent } from './app.component';
+
+// Angular Material Modules
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,9 @@ import { AppComponent } from './app.component';
     AngularFireDatabaseModule,
     AgmCoreModule.forRoot({
       apiKey:'AIzaSyCfR8zGUSeNFqXyjupxcLNAMJDXTmxZBq0'
-    })
+    }),
+    BrowserAnimationsModule,
+    MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]
