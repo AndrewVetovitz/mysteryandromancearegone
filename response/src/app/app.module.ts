@@ -7,13 +7,13 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../environments/environment';
-import {AgmCoreModule} from "@agm/core";
+import { AgmCoreModule } from '@agm/core';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
 import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
-import {AuthService} from "./auth.service";
+import {AuthService} from './auth.service';
 
 const routes: Routes = [
   {
