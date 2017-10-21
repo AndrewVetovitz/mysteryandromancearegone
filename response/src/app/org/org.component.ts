@@ -62,19 +62,19 @@ export class OrgComponent implements OnInit {
   }
 
 
-  addMember(){
+  addMember() {
     // let user = this.afs.collection('users', ref => ref.where('uid','==',this.newMemberEmail).limit(1));
     // user.update({OrgIds[this.org.uid] : true})
   }
 
-  addTeam(name: string){
+  addTeam(name: string) {
     this.orgCopy.teams.push({name: name, premadePins: []});
     this.orgRef.update(this.orgCopy).then( r => {this.newTeamName = '';});
   }
 
-  addPin(text: string, index: number){
+  addPin(text: string, index: number) {
     this.orgCopy.teams[index].premadePins.push(text);
-    this.orgRef.update(this.orgCopy)
+    this.orgRef.update(this.orgCopy);
   }
 
   addIncident() {

@@ -5,7 +5,7 @@
         {{(org | async)?.name}}
       </mat-card-title>
       <mat-card-content>
-        NAME GOES HERE
+        {{(auth.user | async)?.displayName}}
       </mat-card-content>
     </mat-card>
   </div>
@@ -21,25 +21,30 @@
         {{ user.data.displayName }} : {{user.data.email}}
       </mat-card-content>
 
-      <mat-card-footer>
-        <button mat-button class="add-member col-xs-12">
-          <mat-icon aria-label="Add Team Member">add_circle</mat-icon>
-          Add Member
-        </button>
-        <div>
-          <mat-form-field class="col-xs-6">
-            <input matInput placeholder="New Member">
-          </mat-form-field>
-          <div class="col-xs-6">
-            <button mat-icon-button>
-              <mat-icon>done</mat-icon>
-            </button>
-            <button mat-icon-button>
-              <mat-icon>clear</mat-icon>
-            </button>
+      <mat-card-actions>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon aria-label="Add Team Member">add_circle</mat-icon>
+              Add Member
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>
+            <mat-form-field class="col-xs-6">
+              <input matInput placeholder="New Member Email" [(ngModel)]="newMemberEmail">
+            </mat-form-field>
+            <div class="col-xs-6">
+              <button mat-icon-button (click)="addMember()">
+                <mat-icon>done</mat-icon>
+              </button>
+              <button mat-icon-button>
+                <mat-icon>clear</mat-icon>
+              </button>
+            </div>
           </div>
-        </div>
-      </mat-card-footer>
+        </mat-expansion-panel>
+
+      </mat-card-actions>
 
     </mat-card>
   </div>
@@ -53,25 +58,31 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <mat-form-field class="col-xs-6">
-        <input matInput placeholder="Description">
-      </mat-form-field>
-      <div class="col-xs-6">
-        <button mat-icon-button>
-          <mat-icon>done</mat-icon>
-        </button>
-        <button mat-icon-button>
-          <mat-icon>clear</mat-icon>
-        </button>
+      <div>
+        <div *ngFor="let team of teams; let i = index;">
+          <h2>
+            {{team.name}}
+          </h2>
+          <div *ngFor="let pintext of team.premadePins">
+            <p>
+              {{pintext}}
+            </p>
+          </div>
+
+          <mat-form-field class="col-xs-6">
+            <input matInput placeholder="Description" [(ngModel)]="newPin">
+          </mat-form-field>
+          <div class="col-xs-6">
+            <button mat-icon-button (click)="addPin(newPin, i); newPin=''; addPinIndex = -1;">
+              <mat-icon>done</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon>clear</mat-icon>
+            </button>
+          </div>
+        </div>
       </div>
     </mat-expansion-panel>
-  </div>
-
-  <div class="row">
-    <div class="col-xs-12">
-      <h2>Add team members</h2>
-      <input type="text" [(ngModel)]="newMemberEmail">
-    </div>
   </div>
 </div>
 
@@ -84,6 +95,7 @@
     </mat-card>
   </div>
 </div>
+
 <h3>
   Teams
 </h3>
