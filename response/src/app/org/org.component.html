@@ -49,9 +49,17 @@
 </div>
 <div>
   <h3> Current Incidents</h3>
-  <div *ngFor="let incident of incidents | async">
-    <p>
-      {{incident.name}}
-    </p>
+  <div *ngIf="incidents | async ; let items">
+    <!--<p [routerLink]="['/incident', incident.payload.key]">-->
+      <!--{{incident.payload.key}}-->
+    <!--</p>-->
+    <ul>
+      <li *ngFor="let item of items">
+        <p [routerLink]="['/incident', item.payload.key]">
+          {{ item.payload.val().name }}
+        </p>
+      </li>
+    </ul>
+    <div *ngIf="items.length === 0">No Incidents</div>
   </div>
 </div>

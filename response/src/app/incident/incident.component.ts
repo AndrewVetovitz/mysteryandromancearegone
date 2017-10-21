@@ -18,11 +18,13 @@ export class IncidentComponent implements OnInit {
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
 
+  id;
+
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore) { }
 
   ngOnInit() {
-    // let id = this.route.snapshot.paramMap.get('id'); Use for specific keys later
-    this.itemsRef = this.db.list('incidents/markers');
+    this.id = this.route.snapshot.paramMap.get('id'); //Use for specific keys later
+    this.itemsRef = this.db.list('incidents/' + this.id + '/markers');
     this.items = this.itemsRef.snapshotChanges().map(changes => {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });

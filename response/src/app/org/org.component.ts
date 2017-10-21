@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection} from "angularfire2/firestore";
-import {Observable} from "rxjs";
+import {Observable, BehaviorSubject} from "rxjs";
 import {AngularFireDatabase, AngularFireList, AngularFireAction} from "angularfire2/database";
 import {AuthService, User} from "../auth.service";
 import {ActivatedRoute} from "@angular/router";
@@ -42,6 +42,13 @@ export class OrgComponent implements OnInit {
   }
 
   ngOnInit() {
+    let size = new BehaviorSubject(null);
+
+    this.incidents = size.switchMap(size =>
+      this.db.list('/incidents',  ref => ref.orderByChild('orgId').equalTo(this.id)
+      ).snapshotChanges()
+    );
+
     this.id = this.route.snapshot.paramMap.get('id');
     this.orgRef = this.afs.doc<Org>('org/' + this.id);
     this.org = this.orgRef.valueChanges();
@@ -57,8 +64,8 @@ export class OrgComponent implements OnInit {
     });
 
     this.incidentsRef = this.db.list('incidents');
-    let incidents = this.db.list('incidents', ref => ref.orderByChild('orgId').equalTo(this.id));
-    this.incidents = incidents.valueChanges();
+    // let incidents = this.db.list('incidents', ref => ref.orderByChild('orgId').equalTo(this.id));
+    // this.incidents = incidents.snapshotChanges();
   }
 
 
