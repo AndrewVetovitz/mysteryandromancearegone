@@ -281,8 +281,8 @@ export class IncidentComponent implements OnInit {
           this.polygons.update(this.deletePoly.key, { color: '#95a5a6' });
         }else{
           this.polygons.remove(this.deletePoly.key);
-          this.deletePoly = null;
         }
+        this.deletePoly = null;
         break;
       }
       case 1: {
@@ -290,15 +290,15 @@ export class IncidentComponent implements OnInit {
           this.circles.update(this.deletePoly.key, { color: '#95a5a6' });
         }else{
           this.circles.remove(this.deletePoly.key);
-          this.deletePoly = null;
         }
+        this.deletePoly = null;
         break;
       }
       case 2: {
-          this.markers.remove(this.deletePoly.key);
-          this.deletePoly = null;
+        this.markers.remove(this.deletePoly.key);
+        this.deletePoly = null;
+        break;
       }
-      break;
     }
   }
 
