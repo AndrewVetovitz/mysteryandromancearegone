@@ -250,7 +250,7 @@ export class IncidentComponent implements OnInit {
     }
   }
 
-  deletePolygon(key: string) {
+  setPolygon(key: string) {
     console.log(key);
     this.deletePoly = true;
   }
