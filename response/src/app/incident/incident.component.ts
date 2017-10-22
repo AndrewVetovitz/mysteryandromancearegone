@@ -152,7 +152,9 @@ export class IncidentComponent implements OnInit {
           dm.setDrawingMode(null);
               console.log(event);
 
-          let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          // let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          let newPin = [event.overlay.position.lat(), event.overlay.position.lng()];
+
           markers.push(newPin);
         }
 

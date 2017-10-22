@@ -63,5 +63,10 @@
     </directions-renderer>
     <marker *ngFor="let pos of markersHandler | async" [position]="pos">
     </marker>
+
+    <custom-marker *ngFor="let pos of markersHandler | async" [position]="pos">
+      <div class="custom-icon">test
+      </div>
+    </custom-marker>
   </ngui-map>
 </div>
