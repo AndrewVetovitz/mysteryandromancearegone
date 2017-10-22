@@ -63,29 +63,36 @@ export class IncidentComponent implements OnInit {
 
   markersHandler: Observable<any>;
 
-  userPos: any;
+  userPos: any = [];
   userID: any;
   userPicURL: any;
+
+  myLocation: any;
+
+  realTimePosition: any;
 
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
               private cdr: ChangeDetectorRef) { this.deleting = false; }
 
   ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id'); // Use for specific keys later
+
     this.auth.user.subscribe(user => {
       this.userInfo = user;
       this.userID = user.uid;
       this.userPicURL = user.photoURL;
-      setInterval(this.getCurrentPos(), 5000);
-      console.log(this.getCurrentPos());
+      console.log(user);
+      this.myLocation = this.db.object('incidents/' + this.id + '/locations/' + user.uid);
+
     });
 
-    this.id = this.route.snapshot.paramMap.get('id'); // Use for specific keys later
+    setInterval(() => {
+      this.getCurrentPos(); }, 1000);
 
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.itemsRef = this.db.list('incidents/' + this.id + '/markers');
-    this.items = this.itemsRef.snapshotChanges().map(changes => {
-      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-    });
+
+    const rtl = this.db.list('incidents/' + this.id + '/locations');
+    this.realTimePosition = rtl.valueChanges().subscribe(res => console.log(res));
+
 
     this.incident = this.db.object('incidents/' + this.id );
     this.incident.valueChanges().subscribe(doc => {
@@ -98,20 +105,13 @@ export class IncidentComponent implements OnInit {
 
     const markers = this.db.list('incidents/' + this.id + '/markers');
     this.markersHandler = markers.valueChanges();
-
-    this.polygonsHandler.subscribe(res => {
-      console.log(res);
-    });
+    this.markersHandler.subscribe(r => console.log(r));
 
     const circles = this.db.list('incidents/' + this.id + '/circles');
     this.circlesHandler = circles.valueChanges();
 
     const squares = this.db.list('incidents/' + this.id + '/squares');
     this.squaresHandler = squares.valueChanges();
-
-    this.markersHandler.subscribe(res => {
-      console.log(res);
-    });
 
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
@@ -139,16 +139,6 @@ export class IncidentComponent implements OnInit {
             color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']],
             clickable: true
           };
-
-          // const newShape = event.overlay;
-          // newShape.type = event.type;
-          //
-          // google.maps.event.addListener(newCircle, 'click', function() {
-          //   console.log('help');
-          //   this.setSelection(newShape);
-          // });
-          // this.setSelection(newShape);
-
           circles.push(newCircle);
         }else if (event.type === google.maps.drawing.OverlayType.RECTANGLE) {
           dm.setDrawingMode(null);
@@ -165,7 +155,9 @@ export class IncidentComponent implements OnInit {
           dm.setDrawingMode(null);
           console.log(event);
 
-          const newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          // let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          const newPin = [event.overlay.position.lat(), event.overlay.position.lng()];
+
           markers.push(newPin);
         }
 
@@ -179,11 +171,6 @@ export class IncidentComponent implements OnInit {
         this.directionsRenderer = directionsRenderer;
       });
     }
-  }
-
-  setSelection(shape) {
-    console.log('WWWWWWWWWWWWWWWWWWWWWWWWWWWw')
-    console.log(shape);
   }
 
   del() {
@@ -219,14 +206,17 @@ export class IncidentComponent implements OnInit {
   getCurrentPos() {
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
-      console.log(navigator.geolocation);
-      navigator.geolocation.getCurrentPosition(function(position) {
-        console.log(position);
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        this.userPos = pos;
+      navigator.geolocation.getCurrentPosition(position => {
+        const pos = [
+          position.coords.latitude,
+          position.coords.longitude
+        ];
+        this.userPos = [
+          position.coords.latitude,
+          position.coords.longitude
+        ];
+        this.myLocation.update({pos: pos, image: this.userPicURL});
+
         return pos;
       }, function() {
         console.log('dad is mad at mom');
@@ -236,6 +226,44 @@ export class IncidentComponent implements OnInit {
       console.log('dad doesnt have internet');
     }
   }
+
+
+  clickPolygon($event) {
+    if (this.deleting){
+
+    }
+  }
+
+  clickCircle($event) {
+    console.log('clicked');
+    console.log($event);
+    if (this.deleting) {
+      // this.findCircle($event);
+
+      const circles = this.db.list('incidents/' + this.id + '/circles');
+      this.circlesHandler = circles.snapshotChanges();
+      circles.remove($event);
+    }
+  }
+
+  findCircle(event) {
+    console.log('what');
+    console.log(event.center);
+    this.circlesHandler.subscribe(res => {
+      console.log(res);
+      for (let i = 0; i < res.length; i++) {
+        console.log(res[i].center);
+        if (Math.abs(event.center.lng - res[i].center.lng) < .000001 && Math.abs(event.center.lat - res[i].center.lat) < .000001) {
+          const circles = this.db.list('incidents/' + this.id + '/circles');
+          console.log(res[i]);
+          circles.remove(res[i]);
+          return;
+        }
+      }
+    });
+  }
+
+
 }
 
 // pin Interface

@@ -45,7 +45,9 @@
                [strokeWeight]="2"
                [clickable]="true"
                [fillColor]="poly.color"
-               [fillOpacity]="0.35"></polygon>
+               [fillOpacity]="0.35"
+               (click)="clickPolygon(poly)">
+      </polygon>
 
       <circle *ngFor="let circle of circlesHandler | async" [center]="circle.center"
               [strokeColor]="circle.color"
@@ -55,7 +57,9 @@
               [clickable]="true"
               [editable]="false"
               [radius]="circle.radius"
-              draggable="false"></circle>
+              draggable="false"
+              (click)="clickCircle(circle)">
+      </circle>
 
       <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
     <directions-renderer  *ngIf="editingUser"
@@ -64,10 +68,18 @@
                           (directions_changed)="directionsChanged()"
                           [directions-request]="direction">
     </directions-renderer>
-    <custom-marker *ngFor="let pos of markersHandler | async" position="pos">
-      <div>
-        <img src="pos.img || " />
-      </div>
+
+    <marker *ngFor="let pos of markersHandler | async" [position]="pos">
+    </marker>
+
+    <custom-marker *ngFor="let pos of markersHandler | async" [position]="pos">
+      <div class="custom-icon">test</div>
     </custom-marker>
+
+    <!--<custom-marker *ngFor="let rtl of realTimePosition | async" [position]="rtl.pos">-->
+      <!--<div>-->
+        <!--<img style="height:25px; width:25px;" [src]="rtl.image" />-->
+      <!--</div>-->
+    <!--</custom-marker>-->
   </ngui-map>
 </div>
