@@ -20,6 +20,7 @@
          (ngModelChange)="direction.destination = $event;"
          [types]="['geocode']" />
   <button (click)="direction.destination=destinationInput.value;showDirection()">Show Directions</button>
+  <button (click)="clearDirection()">Clear</button>
 </div>
 <div class="map-container">
   <ngui-map [options]="mapOptions">
