@@ -24,6 +24,8 @@
     "@angular/platform-browser": "^4.4.6",
     "@angular/platform-browser-dynamic": "^4.4.6",
     "@angular/router": "^4.4.6",
+    "@ngui/map": "^0.19.1",
+    "@types/googlemaps": "^3.29.2",
     "angularfire2": "5.0.0-rc.1",
     "bootstrap": "^3.3.7",
     "core-js": "^2.5.1",
