@@ -1,0 +1,15 @@
+.angular-google-map,
+.my-map .angular-google-map-container {
+  width: 100%;
+  height: 100%;
+}
+
+.full-map {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+ngui-map {
+  height: 100vh;
+  width: 100vw;
+}
