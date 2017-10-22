@@ -277,29 +277,39 @@ export class IncidentComponent implements OnInit {
     console.log(this.deletePoly);
     switch (this.shape) {
       case 0: {
-        if(this.deletePoly.color != '#95a5a6'){
-          this.polygons.update(this.deletePoly.key, { color: '#95a5a6' });
-        }else{
-          this.polygons.remove(this.deletePoly.key);
-        }
-        this.deletePoly = null;
+        this.polygons.remove(this.deletePoly.key);
         break;
       }
       case 1: {
-        if(this.deletePoly.color != '#95a5a6'){
-          this.circles.update(this.deletePoly.key, { color: '#95a5a6' });
-        }else{
-          this.circles.remove(this.deletePoly.key);
-        }
-        this.deletePoly = null;
+        this.circles.remove(this.deletePoly.key);
         break;
       }
       case 2: {
         this.markers.remove(this.deletePoly.key);
-        this.deletePoly = null;
         break;
       }
     }
+
+    this.deletePoly = null;
+  }
+
+  archivePolygon() {
+    console.log(this.deletePoly);
+    switch (this.shape) {
+      case 0: {
+        this.polygons.update(this.deletePoly.key, { color: '#95a5a6' });
+        break;
+      }
+      case 1: {
+        this.circles.update(this.deletePoly.key, { color: '#95a5a6' });
+        break;
+      }
+      case 2: {
+        break;
+      }
+    }
+
+    this.deletePoly = null;
   }
 
   clicked({target: marker}) {

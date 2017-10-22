@@ -32,12 +32,10 @@
       <button mat-raised-button class="align" (click)="direction.destination=destinationInput.value;showDirection()">Show Directions
       </button>
       <button mat-raised-button class="align" *ngIf="deletePoly" (click)="deletePolygon()">
-        <div *ngIf="deletePoly && deletePoly.color == '#95a5a6';else other_content">
-          Delete
-        </div>
-        <ng-template #other_content>
-          Archive
-        </ng-template>
+        Delete
+      </button>
+      <button mat-raised-button class="align" *ngIf="deletePoly && deletePoly.color != '#95a5a6'" (click)="archivePolygon()">
+        Archive
       </button>
       <button mat-raised-button class="align" (click)="clearDirection()">Clear</button>
     </div>
