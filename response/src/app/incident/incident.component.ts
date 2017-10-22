@@ -16,7 +16,8 @@ export class IncidentComponent implements OnInit {
 
   colors = {police:'#1E90FF',
             firedept:'#b30000',
-            paramedics:'#999900'};
+            paramedics:'#999900',
+            lifeguard:'#009900'};
 
   // Name and start point of the map
   title: string = 'My first AGM project';
