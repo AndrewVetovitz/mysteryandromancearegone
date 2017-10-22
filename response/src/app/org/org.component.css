@@ -1,6 +1,6 @@
 
 .add-member {
-  background-color: #448aff;
+  background-color: #005ecb;
 }
 
 .members {
@@ -14,4 +14,28 @@ mat-card-footer {
 
 .row.col-xs-6.org-left-pane {
   margin-right: 2em;
+}
+
+.font-white {
+  color: #ffffff;
+}
+
+.prof-img {
+  margin-right: 1em;
+  height:40px;
+  width:40px;
+  float:left;
+}
+
+.main-card {
+  background-color: #005ecb;
+}
+
+.incidents {
+  text-align: left;
+}
+
+.icon-space {
+  font-size: 26px;
+  margin: 0 3.75em 0 0;
 }

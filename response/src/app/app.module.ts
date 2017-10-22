@@ -15,8 +15,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
 import { AuthService } from './auth.service';
 import { RoutePlannerDirective } from './incident/route-planner.directive';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInputModule, MatDialogModule, MatCardModule, MatSelectModule } from '@angular/material';
 
 const routes: Routes = [
   {
@@ -36,6 +34,11 @@ const routes: Routes = [
     component: ProfileComponent
   }
 ];
+
+// Angular Material Modules
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInputModule, MatDialogModule, MatCardModule, MatSelectModule,
+         MatTableModule, MatExpansionModule } from '@angular/material';
 
 @NgModule({
   declarations: [

@@ -1,31 +1,31 @@
 <div class="row col-xs-6 org-left-pane">
   <div class="row">
-    <mat-card class="col-xs-12">
-      <mat-card-title>
+    <mat-card class="main-card col-xs-12">
+      <mat-card-title class="font-white">
         {{(org | async)?.name}}
       </mat-card-title>
-      <mat-card-content>
+      <mat-card-content class="font-white">
         {{(auth.user | async)?.displayName}}
       </mat-card-content>
     </mat-card>
   </div>
 
   <div class="row">
-    <mat-card class="clearfix">
-      <mat-card-title>
+    <mat-card class="main-card clearfix">
+      <mat-card-title class="font-white">
         Members
       </mat-card-title>
 
-      <mat-card-content *ngFor="let user of users | async" class="col-xs-12 members">
-        <img style="height:40px;width:40px;float:left" [src]="user.data.photoURL">
+      <mat-card *ngFor="let user of users | async" class="col-xs-12 members">
+        <img class="prof-img" [src]="user.data.photoURL">
         {{ user.data.displayName }} : {{user.data.email}}
-      </mat-card-content>
-
+      </mat-card>
+      <div class="row"></div>
       <mat-card-actions>
-        <mat-expansion-panel>
+        <mat-expansion-panel hideToggle="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <mat-icon aria-label="Add Team Member">add_circle</mat-icon>
+              <mat-icon class="icon-space" aria-label="Add Team Member">add_circle</mat-icon>
               Add Member
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -50,38 +50,54 @@
   </div>
 
   <div class="row">
-    <mat-expansion-panel>
+    <mat-expansion-panel class="add-member">
 
       <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title class="font-white">
+          Teams
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div *ngFor="let team of teams; let i = index;">
+        <p>
+          {{team.name}}
+        </p>
+      </div>
+
+    </mat-expansion-panel>
+  </div>
+
+  <div class="row">
+    <mat-expansion-panel class="add-member">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-white">
           Custom Drop-pins
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <div>
-        <div *ngFor="let team of teams; let i = index;">
-          <h2>
-            {{team.name}}
-          </h2>
-          <div *ngFor="let pintext of team.premadePins">
-            <p>
-              {{pintext}}
-            </p>
-          </div>
+      <mat-card class="main-card" *ngFor="let team of teams; let i = index;">
+        <h2>
+          {{team.name}}
+        </h2>
+        <mat-card *ngFor="let pintext of team.premadePins">
+          <p>
+            {{pintext}}
+          </p>
+        </mat-card>
 
-          <mat-form-field class="col-xs-6">
-            <input matInput placeholder="Description" [(ngModel)]="newPin">
-          </mat-form-field>
-          <div class="col-xs-6">
-            <button mat-icon-button (click)="addPin(newPin, i); newPin=''; addPinIndex = -1;">
-              <mat-icon>done</mat-icon>
-            </button>
-            <button mat-icon-button>
-              <mat-icon>clear</mat-icon>
-            </button>
-          </div>
+        <mat-form-field class="col-xs-6">
+          <input matInput placeholder="Description" [(ngModel)]="newPin">
+        </mat-form-field>
+        <div class="col-xs-6">
+          <button mat-icon-button (click)="addPin(newPin, i); newPin=''; addPinIndex = -1;">
+            <mat-icon>done</mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon>clear</mat-icon>
+          </button>
         </div>
-      </div>
+      </mat-card>
     </mat-expansion-panel>
   </div>
 
@@ -89,59 +105,30 @@
 
 <div class="row col-xs-6">
   <div class="row">
-    <mat-card class="clearfix">
-      <mat-card-title>
+    <mat-card class="main-card clearfix">
+      <mat-card-title class="font-white">
         Current Incidents
       </mat-card-title>
+      <div *ngIf="incidents | async ; let items">
+        <button class="incidents font-white row col-xs-12" mat-button *ngFor="let item of items"
+                [routerLink]="['/incident', item.payload.key]">
+          {{ item.payload.val().name }}
+          <mat-icon>open_in_new</mat-icon>
+        </button>
+      </div>
     </mat-card>
   </div>
 </div>
 
-<h3>
-  Teams
-</h3>
-<div>
-  <div *ngFor="let team of teams; let i = index;">
-    <p>
-      {{team.name}}
-    </p>
-    <div *ngFor="let pintext of team.premadePins">
-      <p>
-        {{pintext}}
-      </p>
-    </div>
-    <button (click)="addPinIndex = i"> add new pin quick text</button>
-    <div *ngIf="addPinIndex == i">
-      <input type="text" [(ngModel)]="newPin">
-      <button (click)="addPin(newPin, i); newPin=''; addPinIndex = -1;">add pin</button>
-    </div>
-  </div>
-</div>
 
-<div>
-  <h3>Add New Team</h3>
-  <input type="text" [(ngModel)]="newTeamName">
-  <button (click)="addTeam(newTeamName)">add new team</button>
-</div>
+<!--<div>-->
+<!--<h3>Add New Team</h3>-->
+<!--<input type="text" [(ngModel)]="newTeamName">-->
+<!--<button (click)="addTeam(newTeamName)">add new team</button>-->
+<!--</div>-->
 
-<div>
-  <h3> add New Incident</h3>
-  <input type="text" [(ngModel)]="newIncident">
-  <button (click)="addIncident(newIncident)">add new Incident</button>
-</div>
-<div>
-  <h3> Current Incidents</h3>
-  <div *ngIf="incidents | async ; let items">
-    <!--<p [routerLink]="['/incident', incident.payload.key]">-->
-      <!--{{incident.payload.key}}-->
-    <!--</p>-->
-    <ul>
-      <li *ngFor="let item of items">
-        <p [routerLink]="['/incident', item.payload.key]">
-          {{ item.payload.val().name }}
-        </p>
-      </li>
-    </ul>
-    <div *ngIf="items.length === 0">No Incidents</div>
-  </div>
-</div>
+<!--<div>-->
+<!--<h3> add New Incident</h3>-->
+<!--<input type="text" [(ngModel)]="newIncident">-->
+<!--<button (click)="addIncident(newIncident)">add new Incident</button>-->
+<!--</div>-->

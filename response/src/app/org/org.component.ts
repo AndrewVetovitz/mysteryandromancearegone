@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection} from "angularfire2/firestore";
-import {Observable, BehaviorSubject} from "rxjs";
-import {AngularFireDatabase, AngularFireList, AngularFireAction} from "angularfire2/database";
-import {AuthService, User} from "../auth.service";
-import {ActivatedRoute} from "@angular/router";
+import {AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection} from 'angularfire2/firestore';
+import {Observable, BehaviorSubject} from 'rxjs';
+import {AngularFireDatabase, AngularFireList, AngularFireAction} from 'angularfire2/database';
+import {AuthService, User} from '../auth.service';
+import {ActivatedRoute} from '@angular/router';
 import * as firebase from 'firebase/app';
 
 export interface Org {

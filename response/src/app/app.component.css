@@ -1,5 +1,5 @@
 mat-sidenav-container {
-  background-color: #718792;
+  background-color: #eee;
   margin: 0;
   position: fixed;
   height: 100%;
@@ -26,5 +26,13 @@ mat-sidenav {
 }
 
 .mat-drawer.mat-drawer-push {
-  background-color: #005ecb;
+  background-color: #455a64;
+}
+
+.mat-list-item {
+  color: #ffffff;
+}
+
+.mat-nav-list {
+
 }
