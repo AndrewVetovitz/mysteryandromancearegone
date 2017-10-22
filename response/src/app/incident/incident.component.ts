@@ -84,7 +84,7 @@ export class IncidentComponent implements OnInit {
   markers;
 
   currentPinText = '';
-  currentTeamPin = '';
+  currentTeamPin = {name:''};
 
   dco = {
   position: 2,
@@ -172,8 +172,8 @@ export class IncidentComponent implements OnInit {
           dm.setDrawingMode(null);
               console.log(event);
 
-          if(this.currentTeamPin == ''){
-            this.currentTeamPin = 'paramedics'
+          if(this.currentTeamPin.name == ''){
+            this.currentTeamPin.name = 'paramedics'
           }
           if(this.currentPinText == ''){
             this.currentPinText = 'A person is seriously harmed';
