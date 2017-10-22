@@ -255,7 +255,7 @@ export class IncidentComponent implements OnInit {
     }
   }
 
-  shape;
+  shape: number;
 
   setPolygon(poly) {
     this.deletePoly = poly;
