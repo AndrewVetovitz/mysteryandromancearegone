@@ -1,29 +1,39 @@
 <mat-sidenav-container>
   <mat-sidenav mode='push' opened='true' #sidenav>
-    <mat-nav-list class="sidenav-tabs">
+    <mat-card class="user" *ngIf="auth.user | async as user">
+      <img class="nav-prof-img" [src]="user.photoURL">
+      <div>
+        <label class="user-name font-white">{{(auth.user | async)?.displayName}}</label>
+        <label class="user-email font-white">{{(auth.user | async)?.email}}</label>
+      </div>
+    </mat-card>
+    <mat-nav-list>
       <mat-list-item>
-        <a matLine routerLinkActive="active-link" routerLink="/profile">Profile
-        </a>
+        <mat-icon class="nav-icon">group_work</mat-icon>
+        <div>
+          <a matLine routerLinkActive="active-link" [routerLink]="['/org','nO2epGylHwK2A8CZK614']">Organization
+          </a>
+        </div>
       </mat-list-item>
       <mat-list-item>
-        <a matLine routerLinkActive="active-link" [routerLink]="['/org','nO2epGylHwK2A8CZK614']">Organization
-        </a>
+        <mat-icon class="nav-icon">map</mat-icon>
+        <div>
+          <a matLine routerLinkActive="active-link" [routerLink]="['/map']">Map
+          </a>
+        </div>
       </mat-list-item>
-      <mat-list-item>
-        <a matLine routerLinkActive="active-link" [routerLink]="['/map']">Map
-        </a>
+      <mat-list-item class="sticky-footer">
+        <a matLine (click)="auth.signOut()">Logout</a>
       </mat-list-item>
     </mat-nav-list>
     <ul>
     </ul>
   </mat-sidenav>
   <mat-sidenav-content>
+    <button class="menu" mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon class="menu-icon">menu</mat-icon>
+    </button>
     <div class="container site-content">
-      <div class="row">
-        <button mat-button (click)="sidenav.toggle()">
-          <md-icon>toggle sidebar</md-icon>
-        </button>
-      </div>
       <div class="row">
         <router-outlet></router-outlet>
       </div>

@@ -20,7 +20,7 @@ $app-theme:   mat-light-theme($app-primary, $app-accent);
 
 body {
   margin: 0;
-  background-color: #eee;
+  background-color: #718792;
   color:rgba(0,0,0,.87);
   font-family: 'Lato', Helvetica, Arial, sans-serif;
   overflow: auto;
@@ -35,4 +35,8 @@ body {
 
 .mat-drawer-backdrop.mat-drawer-shown {
   visibility: hidden !important;
+}
+
+.font-white {
+  color: #ffffff;
 }

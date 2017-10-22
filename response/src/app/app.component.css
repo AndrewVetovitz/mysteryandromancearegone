@@ -36,3 +36,52 @@ mat-sidenav {
 .mat-nav-list {
 
 }
+
+.nav-prof-img {
+  margin-bottom: .5em;
+  border-radius: 100%;
+  width: 40%;
+}
+
+.user {
+  background-color: #1c313a;
+  padding-bottom: 5px;
+}
+
+.user-name {
+}
+
+.user-email {
+  font-weight: 100;
+}
+
+.nav-icon {
+  margin-right: 1em;
+}
+
+.sticky-footer {
+  background-color: #1c313a;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.menu:focus {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg) translate(10);
+  transform: rotate(45deg);
+}
+
+/* The element to apply the animation to */
+.menu {
+  z-index:-1;
+  position: relative;
+  right: 25px;
+  animation-duration: 4s;
+}
+
+.menu-icon {
+  color: black;
+}
