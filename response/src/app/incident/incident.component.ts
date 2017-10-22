@@ -83,6 +83,7 @@ export class IncidentComponent implements OnInit {
 
   markers;
   polygons;
+  circles;
   currentPinText = '';
   currentTeamPin = {name:''};
 
@@ -254,18 +255,53 @@ export class IncidentComponent implements OnInit {
     }
   }
 
+  shape;
+
   setPolygon(poly) {
-    console.log(poly);
     this.deletePoly = poly;
+    this.shape = 0;
+  }
+
+  setCircle(poly) {
+    this.deletePoly = poly;
+    this.shape = 1;
+  }
+
+  setMarker(poly) {
+    this.deletePoly = poly;
+    this.shape = 2;
   }
 
   deletePolygon() {
     console.log(this.deletePoly);
-    if(this.deletePoly.color != '#95a5a6'){
-      this.polygons.update(this.deletePoly.key, { color: '#95a5a6' });
-    }else{
-      this.polygons.remove(this.deletePoly.key);
-      this.deletePoly = null;
+    switch (this.shape) {
+      case 0: {
+        if(this.deletePoly.color != '#95a5a6'){
+          this.polygons.update(this.deletePoly.key, { color: '#95a5a6' });
+        }else{
+          this.polygons.remove(this.deletePoly.key);
+          this.deletePoly = null;
+        }
+        break;
+      }
+      case 1: {
+        if(this.deletePoly.color != '#95a5a6'){
+          this.circles.update(this.deletePoly.key, { color: '#95a5a6' });
+        }else{
+          this.circles.remove(this.deletePoly.key);
+          this.deletePoly = null;
+        }
+        break;
+      }
+      case 2: {
+        if(this.deletePoly.color != '#95a5a6'){
+          this.markers.update(this.deletePoly.key, { color: '#95a5a6' });
+        }else{
+          this.markers.remove(this.deletePoly.key);
+          this.deletePoly = null;
+        }
+      }
+      break;
     }
   }
 

@@ -44,7 +44,7 @@
                [fillOpacity]="0.35"></polygon>
 
       <circle *ngFor="let circle of circlesHandler | async" [center]="circle.center"
-              (click)="setPolygon(circle)"
+              (click)="setCircle(circle)"
               [strokeColor]="circle.color"
               [fillColor]="circle.color"
               [strokeOpacity]="0.8"
@@ -68,7 +68,9 @@
       <!--</info-window>-->
       <!--</marker>-->
 
-      <custom-marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">
+      <custom-marker *ngFor="let marker of markersHandler | async"
+                     [position]="marker.pos"
+                     (click)="setMarker(poly)">
         <div *ngIf="marker.team.name == 'Police'" class="custom-icon"></div>
         <div *ngIf="marker.team.name == 'paramedics'" class="custom-icon1"></div>
         <div *ngIf="marker.team.name == 'FireDept'" class="custom-icon2"></div>
