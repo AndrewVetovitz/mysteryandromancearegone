@@ -52,3 +52,9 @@ mat-card-title {
 .space {
   margin-right: 1em;
 }
+
+@media (max-width: 500px) {
+  .pull-right.bottom-pad {
+    bottom: 14px !important;
+  }
+}

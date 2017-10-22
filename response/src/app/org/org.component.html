@@ -123,6 +123,23 @@
       </mat-card>
     </div>
   </div>
+
+  <div class="row">
+    <mat-expansion-panel class="secondary" hideToggle="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Add New Incident
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-card>
+        <mat-form-field>
+          <input matInput placeholder="Description" [(ngModel)]="newIncident">
+        </mat-form-field>
+        <button mat-button class="pull-right bottom-pad" (click)="addIncident(newIncident)">Add</button>
+      </mat-card>
+    </mat-expansion-panel>
+  </div>
+
 </div>
 
 
@@ -132,8 +149,5 @@
 <!--<button (click)="addTeam(newTeamName)">add new team</button>-->
 <!--</div>-->
 
-<!--<div>-->
-<!--<h3> add New Incident</h3>-->
-<!--<input type="text" [(ngModel)]="newIncident">-->
-<!--<button (click)="addIncident(newIncident)">add new Incident</button>-->
-<!--</div>-->
+
+
