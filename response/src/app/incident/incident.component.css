@@ -86,9 +86,13 @@ ngui-map {
 
 .align {
   top: -5px;
-  margin: 0 1em 0 1em;
+  margin: 0 2em 0 0;
 }
 
 .space {
-  margin-top: 5em;
+  margin-top: 2em;
+}
+
+.indent {
+  margin-right: 2em;
 }

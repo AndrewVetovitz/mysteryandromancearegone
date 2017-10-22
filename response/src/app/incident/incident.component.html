@@ -21,7 +21,7 @@
 
   <div class="row space">
     <div id="floating-panel">
-      <mat-form-field>
+      <mat-form-field class="indent">
         <input placeholder="Destination" matInput #destinationInput places-auto-complete
                (initialized$)="initialized($event)"
                (place_changed)="placeChanged($event)"
@@ -43,21 +43,25 @@
 
         </drawing-manager>
 
-        <polygon *ngFor="let poly of polygonsHandler | async" [paths]="poly.points"
-                 [strokeColor]="poly.color"
-                 [strokeOpacity]="0.8"
-                 [strokeWeight]="2"
-                 [fillColor]="poly.color"
-                 [fillOpacity]="0.35"></polygon>
+      <polygon *ngFor="let poly of polygonsHandler | async" [paths]="poly.points"
+               (click)="setPolygon(poly)"
+               [strokeColor]="poly.color"
+               [strokeOpacity]="0.8"
+               [strokeWeight]="2"
+               [fillColor]="poly.color"
+               [clickable]="true"
+               [fillOpacity]="0.35"></polygon>
 
-        <circle *ngFor="let circle of circlesHandler | async" [center]="circle.center"
-                [strokeColor]="circle.color"
-                [fillColor]="circle.color"
-                [strokeOpacity]="0.8"
-                [strokeWeight]="2"
-                [editable]="false"
-                [radius]="circle.radius"
-                draggable="false"></circle>
+      <circle *ngFor="let circle of circlesHandler | async" [center]="circle.center"
+              (click)="setCircle(circle)"
+              [strokeColor]="circle.color"
+              [fillColor]="circle.color"
+              [strokeOpacity]="0.8"
+              [strokeWeight]="2"
+              [editable]="false"
+              [radius]="circle.radius"
+              [clickable]="true"
+              draggable="false"></circle>
 
         <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
         <directions-renderer
@@ -73,15 +77,17 @@
         <!--</info-window>-->
         <!--</marker>-->
 
-        <custom-marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">
-          <div *ngIf="marker.team.name == 'Police'" class="custom-icon"></div>
-          <div *ngIf="marker.team.name == 'paramedics'" class="custom-icon1"></div>
-          <div *ngIf="marker.team.name == 'FireDept'" class="custom-icon2"></div>
-          <div *ngIf="marker.team.name == 'lifeguard'" class="custom-icon3"></div>
-          <info-window id="iw">
-            <b>{{marker.description}}</b>
-          </info-window>
-        </custom-marker>
+      <custom-marker *ngFor="let marker of markersHandler | async"
+                     [position]="marker.pos"
+                     (click)="setMarker(marker)">
+        <div *ngIf="marker.team.name == 'Police'" class="custom-icon"></div>
+        <div *ngIf="marker.team.name == 'paramedics'" class="custom-icon1"></div>
+        <div *ngIf="marker.team.name == 'FireDept'" class="custom-icon2"></div>
+        <div *ngIf="marker.team.name == 'lifeguard'" class="custom-icon3"></div>
+        <info-window id="iw">
+          <b>{{marker.description}}</b>
+        </info-window>
+      </custom-marker>
 
         <!--<custom-marker *ngFor="let rtl of realTimePosition | async" [position]="rtl.pos">-->
         <!--<div>-->
@@ -92,3 +98,4 @@
     </div>
   </div>
 </div>
+<button *ngIf="deletePoly" (click)="deletePolygon()"> delete polygon</button>

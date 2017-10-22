@@ -82,13 +82,16 @@ export class IncidentComponent implements OnInit {
   realTimePosition: any;
 
   markers;
-
+  polygons;
+  circles;
   currentPinText = '';
   currentTeamPin = {name:''};
 
+  deletePoly;
+
   dco = {
   position: 2,
-  drawingModes: ['marker','circle', 'polygon']
+  drawingModes: ['marker', 'circle', 'polygon']
   };
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
               private cdr: ChangeDetectorRef) { }
@@ -105,8 +108,8 @@ export class IncidentComponent implements OnInit {
 
     });
 
-    setInterval(()=> {
-      this.getCurrentPos(); },1000);
+    setInterval(() => {
+      this.getCurrentPos(); }, 1000);
 
 
     // let rtl = this.db.list('incidents/' + this.id + '/locations');
@@ -118,14 +121,21 @@ export class IncidentComponent implements OnInit {
       this.org.subscribe( res =>{ this.orgInfo = res;})
     });
 
-    let polygons = this.db.list('incidents/' + this.id + '/polygons');
-    this.polygonsHandler = polygons.valueChanges();
-
+    this.polygons = this.db.list('incidents/' + this.id + '/polygons');
+    // this.polygonsHandler = polygons.valueChanges();
+    this.polygonsHandler = this.polygons.snapshotChanges().map(changes => {
+      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+    });
+    this.polygonsHandler.subscribe( res => {console.log(res)});
     this.markers = this.db.list('incidents/' + this.id + '/markers');
-    this.markersHandler = this.markers.valueChanges();
+    this.markersHandler = this.markers.snapshotChanges().map(changes => {
+      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+    });
 
-    const circles = this.db.list('incidents/' + this.id + '/circles');
-    this.circlesHandler = circles.valueChanges();
+    this.circles = this.db.list('incidents/' + this.id + '/circles');
+    this.circlesHandler = this.circles.snapshotChanges().map(changes => {
+      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+    });
 
     const squares = this.db.list('incidents/' + this.id + '/squares');
     this.squaresHandler = squares.valueChanges();
@@ -143,7 +153,7 @@ export class IncidentComponent implements OnInit {
               points.push({lat :  point.lat(), lng : point.lng()});
             });
             const newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
-            polygons.push(newPoly);
+            this.polygons.push(newPoly);
           this.selectedOverlay = event.overlay;
         }else if(event.type === google.maps.drawing.OverlayType.CIRCLE){
           dm.setDrawingMode(null);
@@ -156,7 +166,7 @@ export class IncidentComponent implements OnInit {
             radius: event.overlay.getRadius(),
             color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']]
           };
-            circles.push(newCircle);
+            this.circles.push(newCircle);
         }else if(event.type === google.maps.drawing.OverlayType.RECTANGLE) {
           dm.setDrawingMode(null);
             this.selectedOverlay = event.overlay;
@@ -167,7 +177,7 @@ export class IncidentComponent implements OnInit {
               points.push({lat :  point.lat(), lng : point.lng()});
             });
             let newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
-            polygons.push(newPoly);
+            this.polygons.push(newPoly);
         } else if (event.type === google.maps.drawing.OverlayType.MARKER) {
           dm.setDrawingMode(null);
               console.log(event);
@@ -245,6 +255,57 @@ export class IncidentComponent implements OnInit {
     }
   }
 
+  shape;
+
+  setPolygon(poly) {
+    this.deletePoly = poly;
+    this.shape = 0;
+  }
+
+  setCircle(poly) {
+    this.deletePoly = poly;
+    this.shape = 1;
+    console.log(poly);
+  }
+
+  setMarker(poly) {
+    this.deletePoly = poly;
+    this.shape = 2;
+  }
+
+  deletePolygon() {
+    console.log(this.deletePoly);
+    switch (this.shape) {
+      case 0: {
+        if(this.deletePoly.color != '#95a5a6'){
+          this.polygons.update(this.deletePoly.key, { color: '#95a5a6' });
+        }else{
+          this.polygons.remove(this.deletePoly.key);
+          this.deletePoly = null;
+        }
+        break;
+      }
+      case 1: {
+        if(this.deletePoly.color != '#95a5a6'){
+          this.circles.update(this.deletePoly.key, { color: '#95a5a6' });
+        }else{
+          this.circles.remove(this.deletePoly.key);
+          this.deletePoly = null;
+        }
+        break;
+      }
+      case 2: {
+        if(this.deletePoly.color != '#95a5a6'){
+          this.markers.update(this.deletePoly.key, { color: '#95a5a6' });
+        }else{
+          this.markers.remove(this.deletePoly.key);
+          this.deletePoly = null;
+        }
+      }
+      break;
+    }
+  }
+
   clicked({target: marker}) {
 
     marker.nguiMapComponent.openInfoWindow('iw', marker);
@@ -253,8 +314,6 @@ export class IncidentComponent implements OnInit {
   clearDirection () {
     this.directionsRenderer.set('directions', null);
   }
-
-
 }
 
 // pin Interface
