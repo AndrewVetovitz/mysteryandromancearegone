@@ -67,7 +67,8 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     MatSelectModule,
     MatCardModule,
     MatTableModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSelectModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

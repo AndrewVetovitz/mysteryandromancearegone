@@ -181,6 +181,10 @@ export class IncidentComponent implements OnInit {
     this.directionsRendererDirective['showDirections'](this.direction);
   }
 
+  quickAddPin(team, quick) {
+
+  }
+
   initialized(autocomplete: any) {
     this.autocomplete = autocomplete;
   }
