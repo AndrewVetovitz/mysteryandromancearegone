@@ -21,7 +21,7 @@
                        [drawingControl]="true"
                        [drawingControlOptions]="{
           position: 2,
-          drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+          drawingModes: ['marker', 'circle', 'polygon']
          }">
 
       </drawing-manager>
@@ -38,7 +38,7 @@
               [fillColor]="circle.color"
               [strokeOpacity]="0.8"
               [strokeWeight]="2"
-              [editable]="true"
+              [editable]="false"
               [radius]="circle.radius"
               draggable="false"></circle>
 

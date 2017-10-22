@@ -141,7 +141,7 @@ export class IncidentComponent implements OnInit {
           dm.setDrawingMode(null);
             this.selectedOverlay = event.overlay;
             this.selectedOverlay.setEditable(true);
-            console.log(event.overlay.getPath().getArray());
+            console.log(event.overlay);
             let points = [];
             event.overlay.getPath().getArray().forEach(point => {
               points.push({lat :  point.lat(), lng : point.lng()});
