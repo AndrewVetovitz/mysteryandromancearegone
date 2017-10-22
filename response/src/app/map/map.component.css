@@ -8,3 +8,8 @@
   width: 100% !important;
   height: 100% !important;
 }
+
+ngui-map {
+  height: 100vh;
+  width: 100vw;
+}
