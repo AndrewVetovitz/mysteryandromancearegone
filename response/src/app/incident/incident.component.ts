@@ -48,8 +48,6 @@ export class IncidentComponent implements OnInit {
 
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
 
-
-
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
         if (event.type !== google.maps.drawing.OverlayType.MARKER) {

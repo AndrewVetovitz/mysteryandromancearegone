@@ -17,11 +17,8 @@
           zIndex: 1
         }">
   </drawing-manager>
-
   <marker *ngFor="let pos of positions"
           [position]="pos"
           (initialized$)="onMarkerInit($event)">
-
   </marker>
 </ngui-map>
-
