@@ -7,21 +7,26 @@
     [drawingControlOptions]="{
           position: 2,
           drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
-         }"
-    [circleOptions]="{
-          fillColor: '#ffff00',
-          fillOpacity: 1,
-          strokeWeight: 5,
-          editable: true,
-          zIndex: 1
-        }"></drawing-manager>
+         }">
+
+  </drawing-manager>
 
   <polygon *ngFor="let poly of polygonsHandler | async" [paths]="poly.points"
-           [strokeColor]="'#FFC107'"
+           [strokeColor]="poly.color"
            [strokeOpacity]="0.8"
            [strokeWeight]="2"
-           [fillColor]="'#FFC107'"
+           [fillColor]="poly.color"
            [fillOpacity]="0.35"></polygon>
+
+  <circle *ngFor="let circle of circlesHandler | async" [center]="circle.center"
+          [strokeColor]="circle.color"
+          [fillColor]="circle.color"
+          [strokeOpacity]="0.8"
+          [strokeWeight]="2"
+          [editable]="true"
+          [radius]="circle.radius"
+          draggable="true"></circle>
+
 
 </ngui-map>
 
