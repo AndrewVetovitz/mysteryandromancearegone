@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from "@angular/router";
 import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
 import {Org} from "../org/org.component";
 import {AuthService} from "../auth.service";
+import { DrawingManager } from '@ngui/map';
 
 @Component({
   selector: 'app-incident',
@@ -27,6 +28,9 @@ export class IncidentComponent implements OnInit {
   incident;
   org: Observable<Org>;
 
+  selectedOverlay: any;
+  @ViewChild(DrawingManager) drawingManager: DrawingManager;
+
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService) { }
 
   ngOnInit() {
@@ -40,7 +44,32 @@ export class IncidentComponent implements OnInit {
     this.incident.valueChanges().subscribe(doc => {
       this.org = this.afs.doc('org/' + doc.orgId).valueChanges();
 
-    })
+    });
+
+    let polygons = this.db.list('incidents/' + this.id + '/polygons');
+
+
+
+    this.drawingManager['initialized$'].subscribe(dm => {
+      google.maps.event.addListener(dm, 'overlaycomplete', event => {
+        if (event.type !== google.maps.drawing.OverlayType.MARKER) {
+          dm.setDrawingMode(null);
+          google.maps.event.addListener(event.overlay, 'click', e => {
+            this.selectedOverlay = event.overlay;
+            this.selectedOverlay.setEditable(true);
+            console.log(event.overlay.getPath().getArray());
+            let points = [];
+            event.overlay.getPath().getArray().forEach(point => {
+              points.push([point.lat(), point.lng()])
+            });
+            let newPoly = { points : points};
+            polygons.push(newPoly);
+          });
+          this.selectedOverlay = event.overlay;
+        }
+      });
+    });
+
   }
 
 
