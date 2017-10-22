@@ -187,10 +187,8 @@ export class IncidentComponent implements OnInit {
     this.itemsRef.push({Marker: marker});
   }
 
-  toArray(pos) {
-    console.log(pos);
-    // return [];
-    return [pos.Marker.lat, pos.Marker.lng];
+  quickAddPin(team,quick) {
+
   }
 }
 

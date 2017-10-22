@@ -1,4 +1,15 @@
 <h1>{{ (org | async)?.name }}</h1>
+<div *ngIf="orgInfo">
+  <div *ngFor="let team of orgInfo.teams">
+    <mat-form-field>
+      <mat-select [placeholder]="team.name">
+        <mat-option *ngFor="let quick of team.premadePins" [value]="quick" (click)="quickAddPin(team,quick)">
+          {{ quick }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
 
 <div id="floating-panel">
   <b>Start: </b>
