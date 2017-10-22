@@ -31,6 +31,7 @@
       </mat-form-field>
       <button mat-raised-button class="align" (click)="direction.destination=destinationInput.value;showDirection()">Show Directions
       </button>
+      <button mat-raised-button class="align" *ngIf="deletePoly" (click)="deletePolygon()"> delete polygon</button>
       <button mat-raised-button class="align" (click)="clearDirection()">Clear</button>
     </div>
     <div class="row"></div>
@@ -98,4 +99,3 @@
     </div>
   </div>
 </div>
-<button *ngIf="deletePoly" (click)="deletePolygon()"> delete polygon</button>
