@@ -218,6 +218,14 @@ export class IncidentComponent implements OnInit {
       console.log('dad doesnt have internet');
     }
   }
+
+  clicked({target: marker}) {
+
+    marker.nguiMapComponent.openInfoWindow('iw', marker);
+  }
+
+
+
 }
 
 // pin Interface
