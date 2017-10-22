@@ -157,6 +157,10 @@ export class IncidentComponent implements OnInit {
             });
             this.selectedOverlay = event.overlay;
         }
+
+        event.overlay.setMap(null);
+        delete event.overlay;
+
       });
     });
 
