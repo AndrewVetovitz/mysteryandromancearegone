@@ -160,7 +160,6 @@ export class IncidentComponent implements OnInit {
 
         event.overlay.setMap(null);
         delete event.overlay;
-
       });
     });
 
