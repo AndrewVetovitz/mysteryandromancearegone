@@ -1,19 +1,23 @@
 
 .add-member {
-  background-color: #005ecb;
+  background-color: #0091ea;
 }
 
 .members {
   margin-bottom: 1em;
+  background-color: #a7c0cd;
+}
+
+.member {
+  margin-bottom: 1em;
+}
+
+.secondary {
+  background-color: #a7c0cd;
 }
 
 mat-card-footer {
   margin-bottom: .5em;
-}
-
-
-.row.col-xs-6.org-left-pane {
-  margin-right: 2em;
 }
 
 .prof-img {
@@ -25,7 +29,7 @@ mat-card-footer {
 }
 
 .main-card {
-  background-color: #005ecb;
+  background-color: #0091ea;
 }
 
 .incidents {
@@ -33,6 +37,18 @@ mat-card-footer {
 }
 
 .icon-space {
-  font-size: 26px;
-  margin: 0 3.75em 0 0;
+  /*font-size: 26px;*/
+  /*margin: 0 3.75em 0 0;*/
+}
+
+.content {
+  background-color: #a7c0cd;
+}
+
+mat-card-title {
+  font-size: 20px;
+}
+
+.space {
+  margin-right: 1em;
 }
