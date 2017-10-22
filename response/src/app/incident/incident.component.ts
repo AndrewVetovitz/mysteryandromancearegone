@@ -200,6 +200,7 @@ export class IncidentComponent implements OnInit {
 
   showDirection() {
     this.direction.origin = this.userPos[0].toString() + ", " + this.userPos[1].toString();
+    console.log(this.direction);
     this.directionsRendererDirective['showDirections'](this.direction);
   }
 
@@ -250,7 +251,7 @@ export class IncidentComponent implements OnInit {
   }
 
   clearDirection () {
-    this.directionsRenderer.setMap(null);
+    this.directionsRenderer.set('directions', null);
   }
 
 
