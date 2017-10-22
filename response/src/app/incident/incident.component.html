@@ -53,7 +53,6 @@
               [radius]="circle.radius"
               draggable="false"></circle>
 
-
       <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
     <directions-renderer  *ngIf="editingUser"
                           [suppressMarkers]="true"
@@ -61,7 +60,10 @@
                           (directions_changed)="directionsChanged()"
                           [directions-request]="direction">
     </directions-renderer>
-    <marker *ngFor="let pos of markersHandler | async" [position]="pos">
-    </marker>
+    <custom-marker *ngFor="let pos of markersHandler | async" position="pos">
+      <div>
+        <img src="pos.img || " />
+      </div>
+    </custom-marker>
   </ngui-map>
 </div>
