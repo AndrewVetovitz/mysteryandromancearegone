@@ -1,11 +1,11 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { DirectionsRenderer } from '@ngui/map';
-import {AngularFirestore} from "angularfire2/firestore";
-import {Observable} from 'rxjs/Observable';
-import {ActivatedRoute} from "@angular/router";
-import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
-import {Org} from "../org/org.component";
-import {AuthService} from "../auth.service";
+import { AngularFirestore } from "angularfire2/firestore";
+import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute } from "@angular/router";
+import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
+import { Org } from "../org/org.component";
+import { AuthService } from "../auth.service";
 import { DrawingManager } from '@ngui/map';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
@@ -16,10 +16,10 @@ import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 })
 export class IncidentComponent implements OnInit {
 
-  colors = {police:'#1E90FF',
-            firedept:'#b30000',
-            paramedics:'#999900',
-            lifeguard:'#009900'};
+  colors = {police: '#1E90FF',
+            firedept: '#b30000',
+            paramedics: '#999900',
+            lifeguard: '#009900'};
 
   // Name and start point of the map
   title: string = 'My first AGM project';
@@ -40,16 +40,12 @@ export class IncidentComponent implements OnInit {
   };
 
   mapInfo: any = {};
-
   currentPos: string;
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
-
-  positions = [];
-
-  id;
-  incident;
+  id: any;
+  incident: any;
   org: Observable<Org>;
 
   polygonsHandler: Observable<any>;
@@ -58,25 +54,42 @@ export class IncidentComponent implements OnInit {
   selectedOverlay: any;
   @ViewChild(DrawingManager) drawingManager: DrawingManager;
 
-  //DONT REALLY USE THESE NOT ASYNC SO NOT ALWAYS GOING TO GET THEM
+  // DONT REALLY USE THESE NOT ASYNC SO NOT ALWAYS GOING TO GET THEM
   userInfo;
   orgInfo;
 
   markersHandler: Observable<any>;
 
+  userPos: any = [];
+  userID: any;
+  userPicURL: any;
+
+  myLocation: any;
+
+  realTimePosition: any;
+
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
               private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-      this.auth.user.subscribe(user => this.userInfo = user);
+    this.id = this.route.snapshot.paramMap.get('id'); // Use for specific keys later
 
-      this.id = this.route.snapshot.paramMap.get('id'); //Use for specific keys later
+    this.auth.user.subscribe(user => {
+      this.userInfo = user;
+      this.userID = user.uid;
+      this.userPicURL = user.photoURL;
+      console.log(user)
+      this.myLocation = this.db.object('incidents/' + this.id + '/locations/' + user.uid);
 
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.itemsRef = this.db.list('incidents/' + this.id + '/markers');
-    this.items = this.itemsRef.snapshotChanges().map(changes => {
-      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });
+
+    setInterval(()=> {
+      this.getCurrentPos(); },1000);
+
+
+    let rtl = this.db.list('incidents/' + this.id + '/locations');
+    this.realTimePosition = rtl.valueChanges().subscribe(res => console.log(res));
+
 
     this.incident = this.db.object('incidents/' + this.id );
     this.incident.valueChanges().subscribe(doc => {
@@ -84,22 +97,12 @@ export class IncidentComponent implements OnInit {
       this.org.subscribe( res =>{ this.orgInfo = res;})
     });
 
-
-
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
     this.polygonsHandler = polygons.valueChanges();
 
-    //   .map(changes => {
-    //   return changes.map(c => (
-    //     {points: [[c.payload.val().points]]})
-    //   );
-    // });
     let markers = this.db.list('incidents/' + this.id + '/markers');
     this.markersHandler = markers.valueChanges();
-
-    this.polygonsHandler.subscribe(res => {
-      console.log(res);
-    });
+    this.markersHandler.subscribe(r => console.log(r));
 
     const circles = this.db.list('incidents/' + this.id + '/circles');
     this.circlesHandler = circles.valueChanges();
@@ -107,9 +110,6 @@ export class IncidentComponent implements OnInit {
     const squares = this.db.list('incidents/' + this.id + '/squares');
     this.squaresHandler = squares.valueChanges();
 
-    this.markersHandler.subscribe(res => {
-      console.log(res);
-    });
 
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
@@ -160,7 +160,6 @@ export class IncidentComponent implements OnInit {
 
         event.overlay.setMap(null);
         delete event.overlay;
-
       });
     });
 
@@ -180,16 +179,7 @@ export class IncidentComponent implements OnInit {
     this.directionsRendererDirective['showDirections'](this.direction);
   }
 
-  mapClicked($event: any) {
-    this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
-  }
-
-
-  addItem(marker: Marker) {
-    this.itemsRef.push({Marker: marker});
-  }
-
-  quickAddPin(team,quick) {
+  quickAddPin(team, quick) {
 
   }
 
@@ -208,11 +198,17 @@ export class IncidentComponent implements OnInit {
   getCurrentPos() {
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        let pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
+      navigator.geolocation.getCurrentPosition(position => {
+        let pos = [
+          position.coords.latitude,
+          position.coords.longitude
+        ];
+        this.userPos = [
+          position.coords.latitude,
+          position.coords.longitude
+        ];
+        this.myLocation.update({pos:pos,image:this.userPicURL});
+
         return pos;
       }, function() {
         console.log('dad is mad at mom');
