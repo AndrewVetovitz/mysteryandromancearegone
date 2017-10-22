@@ -86,7 +86,7 @@ export class IncidentComponent implements OnInit {
   currentPinText = '';
   currentTeamPin = {name:''};
 
-  deletePoly = false;
+  deletePoly;
 
   dco = {
   position: 2,
@@ -250,14 +250,18 @@ export class IncidentComponent implements OnInit {
     }
   }
 
-  setPolygon(key: string) {
-    console.log(key);
-    this.deletePoly = true;
+  setPolygon(poly) {
+    this.deletePoly = poly;
   }
 
-  deletePolygon(key: string) {
-    console.log(key);
-    this.polygons.remove(key);
+  deletePolygon() {
+    if(this.deletePoly.color != '#95a5a6'){
+      this.polygons.update(this.deletePoly.key, { color: '#95a5a6' });
+
+    }else{
+      this.polygons.remove(this.deletePoly.key);
+      this.deletePoly = null;
+    }
   }
 
   clicked({target: marker}) {
