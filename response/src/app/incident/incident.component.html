@@ -5,15 +5,17 @@
 
 <!-- this creates a google map on the page with the given lat/lng from -->
 <!-- the component as the initial center of the map: -->
-<agm-map id="map" [latitude]="latitude"
-         [longitude]="longitude"
-         (mapClick)="mapClicked($event)">
-  <sebm-google-map-directions [origin]="origin" [destination]="destination"></sebm-google-map-directions>
-  <agm-marker *ngFor="let obj of items | async"
-    [latitude]="obj.Marker.lat"
-    [longitude]="obj.Marker.lng"
-    [label]="obj.Marker.label">
-  </agm-marker>
-</agm-map>
+
+<div id="map"></div>
+<!--<agm-map id="map" [latitude]="latitude"-->
+         <!--[longitude]="longitude"-->
+         <!--(mapClick)="mapClicked($event)">-->
+  <!--<sebm-google-map-directions [origin]="origin" [destination]="destination"></sebm-google-map-directions>-->
+  <!--<agm-marker *ngFor="let obj of items | async"-->
+    <!--[latitude]="obj.Marker.lat"-->
+    <!--[longitude]="obj.Marker.lng"-->
+    <!--[label]="obj.Marker.label">-->
+  <!--</agm-marker>-->
+<!--</agm-map>-->
 
 
