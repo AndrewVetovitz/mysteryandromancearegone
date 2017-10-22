@@ -12,23 +12,19 @@
 </div>
 
 <div id="floating-panel">
-  <b>Start: </b>
-  <select [ngModel]="direction.origin"
-          (ngModelChange)="direction.origin = $event; showDirection()">
-    <option [ngValue]="'penn station, new york, ny'">Penn Station</option>
-    <option [ngValue]="'grand central station, new york, ny'">Grand Central Station</option>
-  </select>
-  <b>End: </b>
-  <select [ngModel]="direction.destination"
-          (ngModelChange)="direction.destination = $event; showDirection()">
-    <option [ngValue]="'260 Broadway New York NY 10007'">City Hall</option>
-    <option [ngValue]="'W 49th St & 5th Ave, New York, NY 10020'">Rockefeller Center</option>
-  </select>
+  <b>Destination: </b>
+  <input  #destinationInput places-auto-complete
+         (initialized$)="initialized($event)"
+         (place_changed)="placeChanged($event)"
+         [ngModel]="direction.destination"
+         (ngModelChange)="direction.destination = $event;"
+         [types]="['geocode']" />
+  <button (click)="direction.destination=destinationInput.value;showDirection()">Show Directions</button>
 </div>
 <div class="map-container">
   <ngui-map [options]="mapOptions">
       <drawing-manager id="draw"
-                       [drawingMode]="'marker'"
+                       [drawingMode]="'stop'"
                        [drawingControl]="true"
                        [drawingControlOptions]="{
           position: 2,
@@ -54,16 +50,27 @@
               draggable="false"></circle>
 
       <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
-    <directions-renderer  *ngIf="editingUser"
+    <directions-renderer
                           [suppressMarkers]="true"
                           [draggable]="true"
                           (directions_changed)="directionsChanged()"
                           [directions-request]="direction">
     </directions-renderer>
-    <custom-marker *ngFor="let pos of markersHandler | async" position="pos">
-      <div>
-        <img src="pos.img || " />
-      </div>
-    </custom-marker>
+
+    <marker *ngFor="let pos of markersHandler | async" [position]="pos" (click)="clicked($event)">
+      <info-window id="iw">
+        <b>{{pos}}</b>
+      </info-window>
+    </marker>
+
+    <!--<custom-marker *ngFor="let pos of markersHandler | async" [position]="pos">-->
+      <!--<div class="custom-icon">test</div>-->
+    <!--</custom-marker>-->
+
+    <!--<custom-marker *ngFor="let rtl of realTimePosition | async" [position]="rtl.pos">-->
+      <!--<div>-->
+        <!--<img style="height:25px; width:25px;" [src]="rtl.image" />-->
+      <!--</div>-->
+    <!--</custom-marker>-->
   </ngui-map>
 </div>

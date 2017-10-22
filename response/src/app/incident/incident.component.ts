@@ -7,6 +7,7 @@ import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
 import { Org } from "../org/org.component";
 import { AuthService } from "../auth.service";
 import { DrawingManager } from '@ngui/map';
+import { ElementRef } from '@angular/core';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -24,19 +25,31 @@ export class IncidentComponent implements OnInit {
   // Name and start point of the map
   title: string = 'My first AGM project';
   @ViewChild(DirectionsRenderer) directionsRendererDirective: DirectionsRenderer;
-  autocomplete: google.maps.places.Autocomplete;
+  autocomplete: any;
   address: any = {};
+  center: any;
+  d = false;
   directionsEnabled = false;
   directionsRenderer: google.maps.DirectionsRenderer;
   directionsResult: google.maps.DirectionsResult;
   direction: any = {
-    origin: 'penn station, new york, ny',
-    destination: '260 Broadway New York NY 10007',
-    travelMode: 'WALKING'};
+    origin: '',
+    destination: '',
+    travelMode: 'DRIVING'};
 
   mapOptions = {
     zoom: 14,
     mapTypeId: 'roadmap'
+  };
+
+  placeSearch;
+  componentForm = {
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_1: 'short_name',
+    country: 'long_name',
+    postal_code: 'short_name'
   };
 
   mapInfo: any = {};
@@ -60,29 +73,35 @@ export class IncidentComponent implements OnInit {
 
   markersHandler: Observable<any>;
 
-  userPos: any;
+  userPos: any = [];
   userID: any;
   userPicURL: any;
+
+  myLocation: any;
+
+  realTimePosition: any;
 
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
               private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id'); // Use for specific keys later
+
     this.auth.user.subscribe(user => {
       this.userInfo = user;
       this.userID = user.uid;
       this.userPicURL = user.photoURL;
-      setInterval(this.getCurrentPos(), 5000);
-      console.log(this.getCurrentPos());
+      console.log(user)
+      this.myLocation = this.db.object('incidents/' + this.id + '/locations/' + user.uid);
+
     });
 
-    this.id = this.route.snapshot.paramMap.get('id'); // Use for specific keys later
+    setInterval(()=> {
+      this.getCurrentPos(); },1000);
 
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.itemsRef = this.db.list('incidents/' + this.id + '/markers');
-    this.items = this.itemsRef.snapshotChanges().map(changes => {
-      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-    });
+
+    // let rtl = this.db.list('incidents/' + this.id + '/locations');
+    // this.realTimePosition = rtl.valueChanges().subscribe(res => console.log(res));
 
     this.incident = this.db.object('incidents/' + this.id );
     this.incident.valueChanges().subscribe(doc => {
@@ -93,17 +112,9 @@ export class IncidentComponent implements OnInit {
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
     this.polygonsHandler = polygons.valueChanges();
 
-    //   .map(changes => {
-    //   return changes.map(c => (
-    //     {points: [[c.payload.val().points]]})
-    //   );
-    // });
     let markers = this.db.list('incidents/' + this.id + '/markers');
     this.markersHandler = markers.valueChanges();
-
-    this.polygonsHandler.subscribe(res => {
-      console.log(res);
-    });
+    this.markersHandler.subscribe(r => console.log(r));
 
     const circles = this.db.list('incidents/' + this.id + '/circles');
     this.circlesHandler = circles.valueChanges();
@@ -111,9 +122,6 @@ export class IncidentComponent implements OnInit {
     const squares = this.db.list('incidents/' + this.id + '/squares');
     this.squaresHandler = squares.valueChanges();
 
-    this.markersHandler.subscribe(res => {
-      console.log(res);
-    });
 
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
@@ -156,7 +164,9 @@ export class IncidentComponent implements OnInit {
           dm.setDrawingMode(null);
               console.log(event);
 
-          let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          // let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          let newPin = [event.overlay.position.lat(), event.overlay.position.lng()];
+
           markers.push(newPin);
         }
 
@@ -165,11 +175,9 @@ export class IncidentComponent implements OnInit {
       });
     });
 
-    if (this.directionsEnabled) {
       this.directionsRendererDirective['initialized$'].subscribe( directionsRenderer => {
         this.directionsRenderer = directionsRenderer;
       });
-    }
   }
 
   directionsChanged() {
@@ -178,6 +186,7 @@ export class IncidentComponent implements OnInit {
   }
 
   showDirection() {
+    this.direction.origin = this.userPos[0].toString() + ", " + this.userPos[1].toString();
     this.directionsRendererDirective['showDirections'](this.direction);
   }
 
@@ -188,10 +197,10 @@ export class IncidentComponent implements OnInit {
   initialized(autocomplete: any) {
     this.autocomplete = autocomplete;
   }
-  placeChanged() {
-    let place = this.autocomplete.getPlace();
+  placeChanged(place) {
+    this.center = place.geometry.location;
     for (let i = 0; i < place.address_components.length; i++) {
-      const addressType = place.address_components[i].types[0];
+      let addressType = place.address_components[i].types[0];
       this.address[addressType] = place.address_components[i].long_name;
     }
     this.cdr.detectChanges();
@@ -200,14 +209,17 @@ export class IncidentComponent implements OnInit {
   getCurrentPos() {
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
-      console.log(navigator.geolocation);
-      navigator.geolocation.getCurrentPosition(function(position) {
-        console.log(position);
-        let pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        this.userPos = pos;
+      navigator.geolocation.getCurrentPosition(position => {
+        let pos = [
+          position.coords.latitude,
+          position.coords.longitude
+        ];
+        this.userPos = [
+          position.coords.latitude,
+          position.coords.longitude
+        ];
+        // this.myLocation.update({pos:pos,image:this.userPicURL});
+
         return pos;
       }, function() {
         console.log('dad is mad at mom');
@@ -217,6 +229,13 @@ export class IncidentComponent implements OnInit {
       console.log('dad doesnt have internet');
     }
   }
+
+  clicked({target: marker}) {
+
+    marker.nguiMapComponent.openInfoWindow('iw', marker);
+  }
+
+
 }
 
 // pin Interface
