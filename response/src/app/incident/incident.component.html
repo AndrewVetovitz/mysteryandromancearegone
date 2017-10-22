@@ -1,31 +1,32 @@
-<h1>{{ (org | async)?.name }}</h1>
-<div *ngIf="orgInfo">
-  <div *ngFor="let team of orgInfo.teams">
-    <mat-form-field>
-      <mat-select [placeholder]="team.name">
-        <mat-option *ngFor="let quick of team.premadePins" [value]="quick" (click)="quickAddPin(team,quick)">
-          {{ quick }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+<div class="col-xs-12">
+  <div class="row">
+    <h1>{{ (org | async)?.name }}</h1>
+    <div *ngIf="orgInfo">
+      <div *ngFor="let team of orgInfo.teams">
+        <mat-form-field class="col-xs-3">
+          <mat-select [placeholder]="team.name">
+            <mat-option *ngFor="let quick of team.premadePins" [value]="quick" (click)="quickAddPin(team,quick)">
+              {{ quick }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
   </div>
-</div>
 
-<button (click)="del()">DELETE</button>
-
-<div id="floating-panel">
-  <b>Destination: </b>
-  <input  #destinationInput places-auto-complete
-         (initialized$)="initialized($event)"
-         (place_changed)="placeChanged($event)"
-         [ngModel]="direction.destination"
-         (ngModelChange)="direction.destination = $event;"
-         [types]="['geocode']" />
-  <button (click)="direction.destination=destinationInput.value;showDirection()">Show Directions</button>
-  <button (click)="clearDirection()">Clear</button>
-</div>
-<div class="map-container">
-  <ngui-map [options]="mapOptions">
+  <div id="floating-panel">
+    <b>Destination: </b>
+    <input #destinationInput places-auto-complete
+           (initialized$)="initialized($event)"
+           (place_changed)="placeChanged($event)"
+           [ngModel]="direction.destination"
+           (ngModelChange)="direction.destination = $event;"
+           [types]="['geocode']"/>
+    <button (click)="direction.destination=destinationInput.value;showDirection()">Show Directions</button>
+    <button (click)="clearDirection()">Clear</button>
+  </div>
+  <div class="map-container">
+    <ngui-map [options]="mapOptions">
       <drawing-manager id="draw"
                        [drawingMode]="'stop'"
                        [drawingControl]="true"
@@ -56,33 +57,34 @@
       </circle>
 
       <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
-    <directions-renderer
-                          [suppressMarkers]="true"
-                          [draggable]="true"
-                          (directions_changed)="directionsChanged()"
-                          [directions-request]="direction">
-    </directions-renderer>
+      <directions-renderer
+        [suppressMarkers]="true"
+        [draggable]="true"
+        (directions_changed)="directionsChanged()"
+        [directions-request]="direction">
+      </directions-renderer>
 
-    <!--<marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">-->
+      <!--<marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">-->
       <!--<info-window id="iw">-->
-        <!--<b>{{marker.description}}</b>-->
+      <!--<b>{{marker.description}}</b>-->
       <!--</info-window>-->
-    <!--</marker>-->
+      <!--</marker>-->
 
-    <custom-marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">
-      <div *ngIf="marker.team.name == 'Police'" class="custom-icon"></div>
-      <div *ngIf="marker.team.name == 'paramedics'" class="custom-icon1"></div>
-      <div *ngIf="marker.team.name == 'FireDept'" class="custom-icon2"></div>
-      <div *ngIf="marker.team.name == 'lifeguard'" class="custom-icon3"></div>
-      <info-window id="iw">
-        <b>{{marker.description}}</b>
-      </info-window>
-    </custom-marker>
+      <custom-marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">
+        <div *ngIf="marker.team.name == 'Police'" class="custom-icon"></div>
+        <div *ngIf="marker.team.name == 'paramedics'" class="custom-icon1"></div>
+        <div *ngIf="marker.team.name == 'FireDept'" class="custom-icon2"></div>
+        <div *ngIf="marker.team.name == 'lifeguard'" class="custom-icon3"></div>
+        <info-window id="iw">
+          <b>{{marker.description}}</b>
+        </info-window>
+      </custom-marker>
 
-    <!--<custom-marker *ngFor="let rtl of realTimePosition | async" [position]="rtl.pos">-->
+      <!--<custom-marker *ngFor="let rtl of realTimePosition | async" [position]="rtl.pos">-->
       <!--<div>-->
-        <!--<img style="height:25px; width:25px;" [src]="rtl.image" />-->
+      <!--<img style="height:25px; width:25px;" [src]="rtl.image" />-->
       <!--</div>-->
-    <!--</custom-marker>-->
-  </ngui-map>
+      <!--</custom-marker>-->
+    </ngui-map>
+  </div>
 </div>
