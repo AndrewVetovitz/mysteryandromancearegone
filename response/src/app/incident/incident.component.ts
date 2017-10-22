@@ -1,6 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { DirectionsRenderer } from '@ngui/map';
-import { PlacesAutoComplete } from '@ngui/map';
 import { AngularFirestore } from "angularfire2/firestore";
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute } from "@angular/router";
@@ -8,6 +7,7 @@ import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
 import { Org } from "../org/org.component";
 import { AuthService } from "../auth.service";
 import { DrawingManager } from '@ngui/map';
+import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-incident',
@@ -24,7 +24,8 @@ export class IncidentComponent implements OnInit {
   // Name and start point of the map
   title: string = 'My first AGM project';
   @ViewChild(DirectionsRenderer) directionsRendererDirective: DirectionsRenderer;
-
+  autocomplete: google.maps.places.Autocomplete;
+  address: any = {};
   directionsEnabled = false;
   directionsRenderer: google.maps.DirectionsRenderer;
   directionsResult: google.maps.DirectionsResult;
@@ -63,9 +64,12 @@ export class IncidentComponent implements OnInit {
               private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-      this.auth.user.subscribe(user => this.userInfo = user);
+    this.auth.user.subscribe(user => {
+      this.userInfo = user;
+      console.log(this.getCurrentPos());
+    });
 
-      this.id = this.route.snapshot.paramMap.get('id'); //Use for specific keys later
+    this.id = this.route.snapshot.paramMap.get('id'); // Use for specific keys later
 
     this.id = this.route.snapshot.paramMap.get('id');
     this.itemsRef = this.db.list('incidents/' + this.id + '/markers');
@@ -136,7 +140,7 @@ export class IncidentComponent implements OnInit {
           dm.setDrawingMode(null);
             this.selectedOverlay = event.overlay;
             this.selectedOverlay.setEditable(true);
-            console.log(event.overlay.getPath().getArray());
+            console.log(event.overlay);
             let points = [];
             event.overlay.getPath().getArray().forEach(point => {
               points.push({lat :  point.lat(), lng : point.lng()});
@@ -170,6 +174,53 @@ export class IncidentComponent implements OnInit {
 
   showDirection() {
     this.directionsRendererDirective['showDirections'](this.direction);
+  }
+
+  mapClicked($event: any) {
+    this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
+  }
+
+
+  addItem(marker: Marker) {
+    this.itemsRef.push({Marker: marker});
+  }
+
+  toArray(pos) {
+    console.log(pos);
+    // return [];
+    return [pos.Marker.lat, pos.Marker.lng];
+  }
+
+  initialized(autocomplete: any) {
+    this.autocomplete = autocomplete;
+  }
+  placeChanged() {
+    let place = this.autocomplete.getPlace();
+    for (let i = 0; i < place.address_components.length; i++) {
+      const addressType = place.address_components[i].types[0];
+      this.address[addressType] = place.address_components[i].long_name;
+    }
+    this.cdr.detectChanges();
+  }
+
+  getCurrentPos() {
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      console.log(navigator.geolocation);
+      navigator.geolocation.getCurrentPosition(function(position) {
+        console.log(position);
+        let pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        return pos;
+      }, function() {
+        console.log('dad is mad at mom');
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      console.log('dad doesnt have internet');
+    }
   }
 }
 
