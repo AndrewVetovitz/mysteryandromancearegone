@@ -7,8 +7,6 @@ import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
 import { Org } from "../org/org.component";
 import { AuthService } from "../auth.service";
 import { DrawingManager } from '@ngui/map';
-import { ElementRef } from '@angular/core';
-import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-incident',
