@@ -1,5 +1,6 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { DirectionsRenderer } from '@ngui/map';
+import { PlacesAutoComplete } from '@ngui/map';
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from "@angular/router";
