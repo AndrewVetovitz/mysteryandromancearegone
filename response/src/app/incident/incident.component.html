@@ -70,7 +70,7 @@
 
       <custom-marker *ngFor="let marker of markersHandler | async"
                      [position]="marker.pos"
-                     (click)="setMarker(poly)">
+                     (click)="setMarker(marker)">
         <div *ngIf="marker.team.name == 'Police'" class="custom-icon"></div>
         <div *ngIf="marker.team.name == 'paramedics'" class="custom-icon1"></div>
         <div *ngIf="marker.team.name == 'FireDept'" class="custom-icon2"></div>

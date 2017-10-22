@@ -132,8 +132,8 @@ export class IncidentComponent implements OnInit {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });
 
-    const circles = this.db.list('incidents/' + this.id + '/circles');
-    this.circlesHandler = circles.snapshotChanges().map(changes => {
+    this.circles = this.db.list('incidents/' + this.id + '/circles');
+    this.circlesHandler = this.circles.snapshotChanges().map(changes => {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
     });
 
@@ -166,7 +166,7 @@ export class IncidentComponent implements OnInit {
             radius: event.overlay.getRadius(),
             color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']]
           };
-            circles.push(newCircle);
+            this.circles.push(newCircle);
         }else if(event.type === google.maps.drawing.OverlayType.RECTANGLE) {
           dm.setDrawingMode(null);
             this.selectedOverlay = event.overlay;
@@ -265,6 +265,7 @@ export class IncidentComponent implements OnInit {
   setCircle(poly) {
     this.deletePoly = poly;
     this.shape = 1;
+    console.log(poly);
   }
 
   setMarker(poly) {
