@@ -90,8 +90,6 @@ export class IncidentComponent implements OnInit {
       this.org.subscribe( res =>{ this.orgInfo = res;})
     });
 
-
-
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
     this.polygonsHandler = polygons.valueChanges();
 
