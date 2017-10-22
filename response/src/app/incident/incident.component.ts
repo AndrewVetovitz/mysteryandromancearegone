@@ -199,6 +199,7 @@ export class IncidentComponent implements OnInit {
   }
 
   showDirection() {
+    this.direction.origin = this.userPos[0].toString() + ", " + this.userPos[1].toString();
     this.directionsRendererDirective['showDirections'](this.direction);
   }
 

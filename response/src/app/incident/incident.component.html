@@ -12,21 +12,14 @@
 </div>
 
 <div id="floating-panel">
-  <b>Start: </b>
-  <input #originInput places-auto-complete
-         (initialized$)="initialized($event)"
-         (place_changed)="placeChanged($event)"
-         [ngModel]="direction.origin"
-         (ngModelChange)="direction.origin = $event;"
-         [types]="['geocode']" />
-  <b>End: </b>
+  <b>Destination: </b>
   <input  #destinationInput places-auto-complete
          (initialized$)="initialized($event)"
          (place_changed)="placeChanged($event)"
          [ngModel]="direction.destination"
          (ngModelChange)="direction.destination = $event;"
          [types]="['geocode']" />
-  <button (click)="direction.destination=destinationInput.value;direction.origin=originInput.value;showDirection()">Show Directions</button>
+  <button (click)="direction.destination=destinationInput.value;showDirection()">Show Directions</button>
 </div>
 <div class="map-container">
   <ngui-map [options]="mapOptions">
