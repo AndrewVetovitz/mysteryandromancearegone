@@ -50,7 +50,10 @@
                           (directions_changed)="directionsChanged()"
                           [directions-request]="direction">
     </directions-renderer>
-    <marker *ngFor="let pos of markersHandler | async" [position]="pos">
-    </marker>
+    <custom-marker *ngFor="let pos of markersHandler | async" position="pos">
+      <div>
+        <img src="pos.img || " />
+      </div>
+    </custom-marker>
   </ngui-map>
 </div>

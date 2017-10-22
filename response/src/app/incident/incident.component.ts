@@ -1,12 +1,12 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { DirectionsRenderer } from '@ngui/map';
 import { PlacesAutoComplete } from '@ngui/map';
-import {AngularFirestore} from "angularfire2/firestore";
-import {Observable} from 'rxjs/Observable';
-import {ActivatedRoute} from "@angular/router";
-import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
-import {Org} from "../org/org.component";
-import {AuthService} from "../auth.service";
+import { AngularFirestore } from "angularfire2/firestore";
+import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute } from "@angular/router";
+import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
+import { Org } from "../org/org.component";
+import { AuthService } from "../auth.service";
 import { DrawingManager } from '@ngui/map';
 
 @Component({
@@ -16,10 +16,10 @@ import { DrawingManager } from '@ngui/map';
 })
 export class IncidentComponent implements OnInit {
 
-  colors = {police:'#1E90FF',
-            firedept:'#b30000',
-            paramedics:'#999900',
-            lifeguard:'#009900'};
+  colors = {police: '#1E90FF',
+            firedept: '#b30000',
+            paramedics: '#999900',
+            lifeguard: '#009900'};
 
   // Name and start point of the map
   title: string = 'My first AGM project';
@@ -39,17 +39,12 @@ export class IncidentComponent implements OnInit {
   };
 
   mapInfo: any = {};
-
   currentPos: string;
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
-
-  positions = [];
-
-  id;
-
-  incident;
+  id: any;
+  incident: any;
   org: Observable<Org>;
 
   polygonsHandler: Observable<any>;
@@ -58,7 +53,7 @@ export class IncidentComponent implements OnInit {
   selectedOverlay: any;
   @ViewChild(DrawingManager) drawingManager: DrawingManager;
 
-  //DONT REALLY USE THESE NOT ASYNC SO NOT ALWAYS GOING TO GET THEM
+  // DONT REALLY USE THESE NOT ASYNC SO NOT ALWAYS GOING TO GET THEM
   userInfo;
   orgInfo;
 
@@ -175,21 +170,6 @@ export class IncidentComponent implements OnInit {
 
   showDirection() {
     this.directionsRendererDirective['showDirections'](this.direction);
-  }
-
-  mapClicked($event: any) {
-    this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
-  }
-
-
-  addItem(marker: Marker) {
-    this.itemsRef.push({Marker: marker});
-  }
-
-  toArray(pos) {
-    console.log(pos);
-    // return [];
-    return [pos.Marker.lat, pos.Marker.lng];
   }
 }
 
