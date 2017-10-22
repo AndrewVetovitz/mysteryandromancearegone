@@ -11,8 +11,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     trigger('myAwesomeAnimation', [
       state('default', style({ transform: 'rotate(0)' })),
       state('rotated', style({ transform: 'rotate(-180deg)' })),
-      transition('rotated => default', animate('400ms ease-out')),
-      transition('default => rotated', animate('400ms ease-in'))
+      transition('rotated => default', animate('200ms ease-out')),
+      transition('default => rotated', animate('200ms ease-in'))
     ]),
   ]
 })

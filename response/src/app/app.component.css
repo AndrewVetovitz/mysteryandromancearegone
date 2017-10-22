@@ -13,8 +13,8 @@ mat-sidenav {
 }
 
 .site-content {
-  margin: 0 0 0 4em !important;
   padding: 0;
+  margin: 0em 2em 0em 2em;
 }
 
 .sidenav-projects.mat-icon-button {
@@ -26,11 +26,11 @@ mat-sidenav {
 }
 
 .mat-drawer.mat-drawer-push {
-  background-color: #455a64;
+  background-color: #78909c;
 }
 
 .mat-list-item {
-  color: #ffffff;
+  color: #000000;
 }
 
 .mat-nav-list {
@@ -44,7 +44,7 @@ mat-sidenav {
 }
 
 .user {
-  background-color: #1c313a;
+  background-color: #4b636e;
   padding-bottom: 5px;
 }
 
@@ -60,19 +60,20 @@ mat-sidenav {
 }
 
 .sticky-footer {
-  background-color: #1c313a;
+  background-color: #4b636e;
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   pointer-events: none;
+  color: #ffffff;
 }
 
 /* The element to apply the animation to */
 .menu {
-  right: 65px;
+  position: sticky;
 }
 
 .menu-icon {
-  color: black;
+  color: #000000;
 }
