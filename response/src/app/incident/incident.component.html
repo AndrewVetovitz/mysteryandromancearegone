@@ -1,29 +1,67 @@
 <h1>{{ (org | async)?.name }}</h1>
+<div *ngIf="orgInfo">
+  <div *ngFor="let team of orgInfo.teams">
+    <mat-form-field>
+      <mat-select [placeholder]="team.name">
+        <mat-option *ngFor="let quick of team.premadePins" [value]="quick" (click)="quickAddPin(team,quick)">
+          {{ quick }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
 
+<div id="floating-panel">
+  <b>Start: </b>
+  <select [ngModel]="direction.origin"
+          (ngModelChange)="direction.origin = $event; showDirection()">
+    <option [ngValue]="'penn station, new york, ny'">Penn Station</option>
+    <option [ngValue]="'grand central station, new york, ny'">Grand Central Station</option>
+  </select>
+  <b>End: </b>
+  <select [ngModel]="direction.destination"
+          (ngModelChange)="direction.destination = $event; showDirection()">
+    <option [ngValue]="'260 Broadway New York NY 10007'">City Hall</option>
+    <option [ngValue]="'W 49th St & 5th Ave, New York, NY 10020'">Rockefeller Center</option>
+  </select>
+</div>
 <div class="map-container">
-  <ngui-map zoom="8" center="-34.397, 150.644">
-    <drawing-manager id="draw"
-      [drawingMode]="'marker'"
-      [drawingControl]="true"
-      [drawingControlOptions]="{
-            position: 2,
-            drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
-           }"
-      [circleOptions]="{
-            fillColor: '#ffff00',
-            fillOpacity: 1,
-            strokeWeight: 5,
-            editable: true,
-            zIndex: 1
-          }">
-    </drawing-manager>
-    <polygon *ngFor="let poly of polygonsHandler | async" [paths]="poly.points"
-             [strokeColor]="'#FFC107'"
-             [strokeOpacity]="0.8"
-             [strokeWeight]="2"
-             [fillColor]="'#FFC107'"
-             [fillOpacity]="0.35">
-    </polygon>
-    <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
+  <ngui-map [options]="mapOptions">
+      <drawing-manager id="draw"
+                       [drawingMode]="'marker'"
+                       [drawingControl]="true"
+                       [drawingControlOptions]="{
+          position: 2,
+          drawingModes: ['marker', 'circle', 'polygon']
+         }">
+
+      </drawing-manager>
+
+      <polygon *ngFor="let poly of polygonsHandler | async" [paths]="poly.points"
+               [strokeColor]="poly.color"
+               [strokeOpacity]="0.8"
+               [strokeWeight]="2"
+               [fillColor]="poly.color"
+               [fillOpacity]="0.35"></polygon>
+
+      <circle *ngFor="let circle of circlesHandler | async" [center]="circle.center"
+              [strokeColor]="circle.color"
+              [fillColor]="circle.color"
+              [strokeOpacity]="0.8"
+              [strokeWeight]="2"
+              [editable]="false"
+              [radius]="circle.radius"
+              draggable="false"></circle>
+
+
+      <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
+    <directions-renderer  *ngIf="editingUser"
+                          [suppressMarkers]="true"
+                          [draggable]="true"
+                          (directions_changed)="directionsChanged()"
+                          [directions-request]="direction">
+    </directions-renderer>
+    <marker *ngFor="let pos of markersHandler | async" [position]="pos">
+    </marker>
   </ngui-map>
 </div>
