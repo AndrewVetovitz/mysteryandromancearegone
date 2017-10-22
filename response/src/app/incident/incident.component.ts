@@ -55,11 +55,3 @@ export class IncidentComponent implements OnInit {
     this.itemsRef.push({latitude: $event.fa.x, longitude: $event.fa.y, draggable: true});
   }
 }
-
-// pin Interface
-interface Marker {
-  latitude: any;
-  longitude: any;
-  label?: string;
-  draggable: boolean;
-}
