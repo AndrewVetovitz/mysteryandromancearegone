@@ -1,6 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { DirectionsRenderer } from '@ngui/map';
-import { PlacesAutoComplete } from '@ngui/map';
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from "@angular/router";
@@ -8,6 +7,7 @@ import {AngularFireDatabase, AngularFireList} from "angularfire2/database";
 import {Org} from "../org/org.component";
 import {AuthService} from "../auth.service";
 import { DrawingManager } from '@ngui/map';
+import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-incident',
@@ -24,7 +24,8 @@ export class IncidentComponent implements OnInit {
   // Name and start point of the map
   title: string = 'My first AGM project';
   @ViewChild(DirectionsRenderer) directionsRendererDirective: DirectionsRenderer;
-
+  autocomplete: google.maps.places.Autocomplete;
+  address: any = {};
   directionsEnabled = false;
   directionsRenderer: google.maps.DirectionsRenderer;
   directionsResult: google.maps.DirectionsResult;
@@ -46,7 +47,6 @@ export class IncidentComponent implements OnInit {
   items: Observable<any[]>;
 
   id;
-
   incident;
   org: Observable<Org>;
 
@@ -173,6 +173,36 @@ export class IncidentComponent implements OnInit {
 
   addItem(marker: Marker) {
     this.itemsRef.push({Marker: marker});
+  }
+
+  initialized(autocomplete: any) {
+    this.autocomplete = autocomplete;
+  }
+  placeChanged() {
+    let place = this.autocomplete.getPlace();
+    for (let i = 0; i < place.address_components.length; i++) {
+      const addressType = place.address_components[i].types[0];
+      this.address[addressType] = place.address_components[i].long_name;
+    }
+    this.cdr.detectChanges();
+  }
+
+  getCurrentPos() {
+    // Try HTML5 geolocation.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        let pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        return pos;
+      }, function() {
+        console.log('dad is mad at mom');
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      console.log('dad doesnt have internet');
+    }
   }
 }
 

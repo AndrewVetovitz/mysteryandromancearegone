@@ -13,6 +13,11 @@
     <option [ngValue]="'260 Broadway New York NY 10007'">City Hall</option>
     <option [ngValue]="'W 49th St & 5th Ave, New York, NY 10020'">Rockefeller Center</option>
   </select>
+  <input places-auto-complete
+         (initialized$)="initialized($event)"
+         (place_changed)="placeChanged(place)"
+         [types]="['geocode']" />
+  address: {{address | json}}
 </div>
 <div class="map-container">
   <ngui-map [options]="mapOptions">
