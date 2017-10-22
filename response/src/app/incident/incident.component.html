@@ -45,7 +45,7 @@
               [strokeWeight]="2"
               [editable]="true"
               [radius]="circle.radius"
-              draggable="true"></circle>
+              draggable="false"></circle>
 
 
       <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
@@ -55,5 +55,7 @@
                           (directions_changed)="directionsChanged()"
                           [directions-request]="direction">
     </directions-renderer>
+    <marker *ngFor="let pos of markersHandler | async" [position]="pos">
+    </marker>
   </ngui-map>
 </div>

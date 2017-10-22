@@ -46,6 +46,8 @@ export class IncidentComponent implements OnInit {
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
 
+  positions = [];
+
   id;
   incident;
   org: Observable<Org>;
@@ -92,34 +94,38 @@ export class IncidentComponent implements OnInit {
     //     {points: [[c.payload.val().points]]})
     //   );
     // });
-    // let markers = this.db.list('incidents/' + this.id + '/markers');
-    // this.markersHandler = markers.valueChanges();
+    let markers = this.db.list('incidents/' + this.id + '/markers');
+    this.markersHandler = markers.valueChanges();
 
-    this.polygonsHandler.subscribe(res =>
-    {console.log(res)} );
+    this.polygonsHandler.subscribe(res => {
+      console.log(res);
+    });
 
-    let circles = this.db.list('incidents/' + this.id + '/circles');
+    const circles = this.db.list('incidents/' + this.id + '/circles');
     this.circlesHandler = circles.valueChanges();
 
-    let squares = this.db.list('incidents/' + this.id + '/squares');
+    const squares = this.db.list('incidents/' + this.id + '/squares');
     this.squaresHandler = squares.valueChanges();
+
+    this.markersHandler.subscribe(res => {
+      console.log(res);
+    });
 
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
-        if (event.type == google.maps.drawing.OverlayType.POLYGON) {
+        if (event.type === google.maps.drawing.OverlayType.POLYGON) {
           dm.setDrawingMode(null);
             this.selectedOverlay = event.overlay;
             this.selectedOverlay.setEditable(true);
             console.log(event.overlay.getPath().getArray());
             let points = [];
             event.overlay.getPath().getArray().forEach(point => {
-              points.push({lat :  point.lat(), lng : point.lng()})
+              points.push({lat :  point.lat(), lng : point.lng()});
             });
-
-            let newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
+            const newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
             polygons.push(newPoly);
           this.selectedOverlay = event.overlay;
-        }else if(event.type == google.maps.drawing.OverlayType.CIRCLE){
+        }else if(event.type === google.maps.drawing.OverlayType.CIRCLE){
           dm.setDrawingMode(null);
             this.selectedOverlay = event.overlay;
             this.selectedOverlay.setEditable(true);
@@ -131,24 +137,30 @@ export class IncidentComponent implements OnInit {
             color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']]
           };
             circles.push(newCircle);
-        }else if(event.type == google.maps.drawing.OverlayType.RECTANGLE){
+        }else if(event.type === google.maps.drawing.OverlayType.RECTANGLE) {
           dm.setDrawingMode(null);
             this.selectedOverlay = event.overlay;
             this.selectedOverlay.setEditable(true);
             console.log(event.overlay.getPath().getArray());
             let points = [];
             event.overlay.getPath().getArray().forEach(point => {
-              points.push({lat :  point.lat(), lng : point.lng()})
+              points.push({lat :  point.lat(), lng : point.lng()});
             });
             let newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
             polygons.push(newPoly);
-        } else if(event.type === google.maps.drawing.OverlayType.MARKER) {
-          dm.setDrawingMode();
+        } else if (event.type === google.maps.drawing.OverlayType.MARKER) {
+          dm.setDrawingMode(null);
+              console.log(event);
+
+          let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          markers.push(newPin);
         }
+
+        event.overlay.setMap(null);
+        delete event.overlay;
+
       });
     });
-
-
 
     if (this.directionsEnabled) {
       this.directionsRendererDirective['initialized$'].subscribe( directionsRenderer => {
@@ -173,6 +185,12 @@ export class IncidentComponent implements OnInit {
 
   addItem(marker: Marker) {
     this.itemsRef.push({Marker: marker});
+  }
+
+  toArray(pos) {
+    console.log(pos);
+    // return [];
+    return [pos.Marker.lat, pos.Marker.lng];
   }
 
   initialized(autocomplete: any) {
