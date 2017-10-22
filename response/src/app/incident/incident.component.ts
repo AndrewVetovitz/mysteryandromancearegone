@@ -72,6 +72,7 @@ export class IncidentComponent implements OnInit {
       this.userInfo = user;
       this.userID = user.uid;
       this.userPicURL = user.photoURL;
+      setInterval(this.getCurrentPos(), 5000);
       console.log(this.getCurrentPos());
     });
 
@@ -204,6 +205,7 @@ export class IncidentComponent implements OnInit {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+        this.userPos = pos;
         return pos;
       }, function() {
         console.log('dad is mad at mom');
@@ -212,11 +214,6 @@ export class IncidentComponent implements OnInit {
       // Browser doesn't support Geolocation
       console.log('dad doesnt have internet');
     }
-  }
-
-  updatePos(){
-    this.userPos = this.getCurrentPos();
-    setTimeout(this.updatePos(), 5000);
   }
 }
 
