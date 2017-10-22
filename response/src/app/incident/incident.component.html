@@ -24,6 +24,8 @@
              [fillColor]="'#FFC107'"
              [fillOpacity]="0.35">
     </polygon>
-    <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
+    <marker *ngFor="let pos of positions"
+            [position]="toArray(pos)">
+    </marker>
   </ngui-map>
 </div>

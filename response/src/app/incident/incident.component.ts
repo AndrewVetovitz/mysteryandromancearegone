@@ -23,6 +23,8 @@ export class IncidentComponent implements OnInit {
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
 
+  positions = [];
+
   id;
 
   incident;
@@ -55,11 +57,19 @@ export class IncidentComponent implements OnInit {
     //     {points: [[c.payload.val().points]]})
     //   );
     // });
-    // let markers = this.db.list('incidents/' + this.id + '/markers');
-    // this.markersHandler = markers.valueChanges();
+    let markers = this.db.list('incidents/' + this.id + '/markers');
+    this.markersHandler = markers.valueChanges();
 
     this.polygonsHandler.subscribe(res =>
     {console.log(res)} );
+
+    this.markersHandler.subscribe(res => {
+      console.log(res);
+      for(let i = 0; i < res.length; i++){
+        this.positions.push([res[i].Marker.lat, res[i].Marker.lng]);
+      }
+      console.log(this.positions);
+    });
 
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
@@ -78,13 +88,10 @@ export class IncidentComponent implements OnInit {
           });
           this.selectedOverlay = event.overlay;
         } else if(event.type === google.maps.drawing.OverlayType.MARKER) {
-          dm.setDrawingMode();
+
         }
       });
     });
-
-
-
   }
 
 
@@ -95,6 +102,11 @@ export class IncidentComponent implements OnInit {
 
   addItem(marker: Marker) {
     this.itemsRef.push({Marker: marker});
+  }
+
+  toArray(pos){
+    console.log(pos);
+    return [pos[0], pos[1]];
   }
 }
 
