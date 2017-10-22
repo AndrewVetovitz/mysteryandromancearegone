@@ -68,18 +68,9 @@ mat-sidenav {
   pointer-events: none;
 }
 
-.menu:focus {
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg) translate(10);
-  transform: rotate(45deg);
-}
-
 /* The element to apply the animation to */
 .menu {
-  z-index:-1;
-  position: relative;
-  right: 25px;
-  animation-duration: 4s;
+  right: 65px;
 }
 
 .menu-icon {

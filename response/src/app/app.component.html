@@ -30,10 +30,10 @@
     </ul>
   </mat-sidenav>
   <mat-sidenav-content>
-    <button class="menu" mat-icon-button (click)="sidenav.toggle()">
-      <mat-icon class="menu-icon">menu</mat-icon>
-    </button>
     <div class="container site-content">
+      <button class="menu" mat-icon-button [@myAwesomeAnimation]='state' (click)="rotate(); sidenav.toggle()">
+        <mat-icon class="menu-icon">first_page</mat-icon>
+      </button>
       <div class="row">
         <router-outlet></router-outlet>
       </div>
