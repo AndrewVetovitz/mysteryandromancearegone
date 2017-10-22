@@ -60,12 +60,18 @@ export class IncidentComponent implements OnInit {
 
   markersHandler: Observable<any>;
 
+  userPos: any;
+  userID: any;
+  userPicURL: any;
+
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
               private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
       this.userInfo = user;
+      this.userID = user.uid;
+      this.userPicURL = user.photoURL;
       console.log(this.getCurrentPos());
     });
 
@@ -176,21 +182,6 @@ export class IncidentComponent implements OnInit {
     this.directionsRendererDirective['showDirections'](this.direction);
   }
 
-  mapClicked($event: any) {
-    this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
-  }
-
-
-  addItem(marker: Marker) {
-    this.itemsRef.push({Marker: marker});
-  }
-
-  toArray(pos) {
-    console.log(pos);
-    // return [];
-    return [pos.Marker.lat, pos.Marker.lng];
-  }
-
   initialized(autocomplete: any) {
     this.autocomplete = autocomplete;
   }
@@ -221,6 +212,11 @@ export class IncidentComponent implements OnInit {
       // Browser doesn't support Geolocation
       console.log('dad doesnt have internet');
     }
+  }
+
+  updatePos(){
+    this.userPos = this.getCurrentPos();
+    setTimeout(this.updatePos(), 5000);
   }
 }
 
