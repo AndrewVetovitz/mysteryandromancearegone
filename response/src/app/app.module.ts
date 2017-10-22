@@ -14,8 +14,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
 import { MapComponent } from './map/map.component';
 import { AuthService } from './auth.service';
-import { RoutePlannerDirective } from './incident/route-planner.directive';
 import { NguiMapModule } from '@ngui/map';
+
 
 const routes: Routes = [
   {
@@ -51,8 +51,8 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     OrgComponent,
     ProfileComponent,
     IncidentComponent,
-    RoutePlannerDirective,
-    MapComponent
+    MapComponent,
+    IncidentComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +75,8 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     MatSelectModule,
     MatCardModule,
     MatTableModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSelectModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
