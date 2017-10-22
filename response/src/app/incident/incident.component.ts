@@ -1,11 +1,11 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { DirectionsRenderer } from '@ngui/map';
-import { AngularFirestore } from "angularfire2/firestore";
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-import { ActivatedRoute } from "@angular/router";
-import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
-import { Org } from "../org/org.component";
-import { AuthService } from "../auth.service";
+import { ActivatedRoute } from '@angular/router';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { Org } from '../org/org.component';
+import { AuthService } from '../auth.service';
 import { DrawingManager } from '@ngui/map';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
@@ -15,6 +15,7 @@ import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
   styleUrls: ['./incident.component.css']
 })
 export class IncidentComponent implements OnInit {
+  deleting: boolean;
 
   colors = {police: '#1E90FF',
             firedept: '#b30000',
@@ -22,7 +23,7 @@ export class IncidentComponent implements OnInit {
             lifeguard: '#009900'};
 
   // Name and start point of the map
-  title: string = 'My first AGM project';
+  title = 'My first AGM project';
   @ViewChild(DirectionsRenderer) directionsRendererDirective: DirectionsRenderer;
   autocomplete: google.maps.places.Autocomplete;
   address: any = {};
@@ -41,6 +42,8 @@ export class IncidentComponent implements OnInit {
 
   mapInfo: any = {};
   currentPos: string;
+
+  selectedShape: any;
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
@@ -65,7 +68,7 @@ export class IncidentComponent implements OnInit {
   userPicURL: any;
 
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
-              private cdr: ChangeDetectorRef) { }
+              private cdr: ChangeDetectorRef) { this.deleting = false; }
 
   ngOnInit() {
     this.auth.user.subscribe(user => {
@@ -87,18 +90,13 @@ export class IncidentComponent implements OnInit {
     this.incident = this.db.object('incidents/' + this.id );
     this.incident.valueChanges().subscribe(doc => {
       this.org = this.afs.doc('org/' + doc.orgId).valueChanges();
-      this.org.subscribe( res =>{ this.orgInfo = res;})
+      this.org.subscribe( res => { this.orgInfo = res; });
     });
 
-    let polygons = this.db.list('incidents/' + this.id + '/polygons');
+    const polygons = this.db.list('incidents/' + this.id + '/polygons');
     this.polygonsHandler = polygons.valueChanges();
 
-    //   .map(changes => {
-    //   return changes.map(c => (
-    //     {points: [[c.payload.val().points]]})
-    //   );
-    // });
-    let markers = this.db.list('incidents/' + this.id + '/markers');
+    const markers = this.db.list('incidents/' + this.id + '/markers');
     this.markersHandler = markers.valueChanges();
 
     this.polygonsHandler.subscribe(res => {
@@ -119,44 +117,55 @@ export class IncidentComponent implements OnInit {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
         if (event.type === google.maps.drawing.OverlayType.POLYGON) {
           dm.setDrawingMode(null);
-            this.selectedOverlay = event.overlay;
-            this.selectedOverlay.setEditable(true);
-            console.log(event.overlay.getPath().getArray());
-            let points = [];
-            event.overlay.getPath().getArray().forEach(point => {
-              points.push({lat :  point.lat(), lng : point.lng()});
-            });
-            const newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
-            polygons.push(newPoly);
           this.selectedOverlay = event.overlay;
-        }else if(event.type === google.maps.drawing.OverlayType.CIRCLE){
+          this.selectedOverlay.setEditable(true);
+          console.log(event.overlay.getPath().getArray());
+          const points = [];
+          event.overlay.getPath().getArray().forEach(point => {
+            points.push({lat :  point.lat(), lng : point.lng()});
+          });
+          const newPoly = { points : points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
+          polygons.push(newPoly);
+          this.selectedOverlay = event.overlay;
+        }else if (event.type === google.maps.drawing.OverlayType.CIRCLE) {
           dm.setDrawingMode(null);
-            this.selectedOverlay = event.overlay;
-            this.selectedOverlay.setEditable(true);
-            console.log(event);
+          this.selectedOverlay = event.overlay;
+          this.selectedOverlay.setEditable(true);
+          console.log(event);
 
-          let newCircle = {
+          const newCircle = {
             center: {lat: event.overlay.center.lat(), lng: event.overlay.center.lng()},
             radius: event.overlay.getRadius(),
-            color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']]
+            color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']],
+            clickable: true
           };
-            circles.push(newCircle);
-        }else if(event.type === google.maps.drawing.OverlayType.RECTANGLE) {
+
+          // const newShape = event.overlay;
+          // newShape.type = event.type;
+          //
+          // google.maps.event.addListener(newCircle, 'click', function() {
+          //   console.log('help');
+          //   this.setSelection(newShape);
+          // });
+          // this.setSelection(newShape);
+
+          circles.push(newCircle);
+        }else if (event.type === google.maps.drawing.OverlayType.RECTANGLE) {
           dm.setDrawingMode(null);
-            this.selectedOverlay = event.overlay;
-            this.selectedOverlay.setEditable(true);
-            console.log(event.overlay);
-            let points = [];
-            event.overlay.getPath().getArray().forEach(point => {
-              points.push({lat :  point.lat(), lng : point.lng()});
-            });
-            let newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
-            polygons.push(newPoly);
+          this.selectedOverlay = event.overlay;
+          this.selectedOverlay.setEditable(true);
+          console.log(event.overlay);
+          const points = [];
+          event.overlay.getPath().getArray().forEach(point => {
+            points.push({lat :  point.lat(), lng : point.lng()});
+          });
+          const newPoly = { points : points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
+          polygons.push(newPoly);
         } else if (event.type === google.maps.drawing.OverlayType.MARKER) {
           dm.setDrawingMode(null);
-              console.log(event);
+          console.log(event);
 
-          let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          const newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
           markers.push(newPin);
         }
 
@@ -170,6 +179,16 @@ export class IncidentComponent implements OnInit {
         this.directionsRenderer = directionsRenderer;
       });
     }
+  }
+
+  setSelection(shape) {
+    console.log('WWWWWWWWWWWWWWWWWWWWWWWWWWWw')
+    console.log(shape);
+  }
+
+  del() {
+    this.deleting = !this.deleting;
+    console.log(this.deleting);
   }
 
   directionsChanged() {
@@ -189,7 +208,7 @@ export class IncidentComponent implements OnInit {
     this.autocomplete = autocomplete;
   }
   placeChanged() {
-    let place = this.autocomplete.getPlace();
+    const place = this.autocomplete.getPlace();
     for (let i = 0; i < place.address_components.length; i++) {
       const addressType = place.address_components[i].types[0];
       this.address[addressType] = place.address_components[i].long_name;
@@ -203,7 +222,7 @@ export class IncidentComponent implements OnInit {
       console.log(navigator.geolocation);
       navigator.geolocation.getCurrentPosition(function(position) {
         console.log(position);
-        let pos = {
+        const pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };

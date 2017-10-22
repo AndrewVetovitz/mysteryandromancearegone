@@ -11,6 +11,8 @@
   </div>
 </div>
 
+<button (click)="del()">DELETE</button>
+
 <div id="floating-panel">
   <b>Start: </b>
   <select [ngModel]="direction.origin"
@@ -41,6 +43,7 @@
                [strokeColor]="poly.color"
                [strokeOpacity]="0.8"
                [strokeWeight]="2"
+               [clickable]="true"
                [fillColor]="poly.color"
                [fillOpacity]="0.35"></polygon>
 
@@ -49,6 +52,7 @@
               [fillColor]="circle.color"
               [strokeOpacity]="0.8"
               [strokeWeight]="2"
+              [clickable]="true"
               [editable]="false"
               [radius]="circle.radius"
               draggable="false"></circle>
