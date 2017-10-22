@@ -50,7 +50,7 @@
                           (directions_changed)="directionsChanged()"
                           [directions-request]="direction">
     </directions-renderer>
-    <marker *ngFor="let pos of markersHandler | async" [position]="toArray(pos)">
+    <marker *ngFor="let pos of markersHandler | async" [position]="pos">
     </marker>
   </ngui-map>
 </div>

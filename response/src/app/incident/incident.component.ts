@@ -150,12 +150,10 @@ export class IncidentComponent implements OnInit {
             polygons.push(newPoly);
         } else if (event.type === google.maps.drawing.OverlayType.MARKER) {
           dm.setDrawingMode(null);
-            google.maps.event.addListener(event.overlay, 'click', e => {
-              this.selectedOverlay = event.overlay;
-              this.selectedOverlay.setEditable(true);
               console.log(event);
-            });
-            this.selectedOverlay = event.overlay;
+
+          let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
+          markers.push(newPin);
         }
 
         event.overlay.setMap(null);
