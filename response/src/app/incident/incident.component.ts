@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
+import { DirectionsRenderer } from '@ngui/map';
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from "@angular/router";
@@ -15,10 +16,24 @@ import { DrawingManager } from '@ngui/map';
 export class IncidentComponent implements OnInit {
   // Name and start point of the map
   title: string = 'My first AGM project';
-  lat: number = 51.678418;
-  lng: number = 7.809007;
-  origin: string = '75 9th Ave, New York, NY';
-  destination: string = '715 Wedgewood Dr. Marysville, OH';
+  @ViewChild(DirectionsRenderer) directionsRendererDirective: DirectionsRenderer;
+
+  directionsEnabled = false;
+  directionsRenderer: google.maps.DirectionsRenderer;
+  directionsResult: google.maps.DirectionsResult;
+  direction: any = {
+    origin: 'penn station, new york, ny',
+    destination: '260 Broadway New York NY 10007',
+    travelMode: 'WALKING'};
+
+  mapOptions = {
+    zoom: 14,
+    mapTypeId: 'roadmap'
+  };
+
+  mapInfo: any = {};
+
+  currentPos: string;
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
@@ -34,10 +49,11 @@ export class IncidentComponent implements OnInit {
   selectedOverlay: any;
   @ViewChild(DrawingManager) drawingManager: DrawingManager;
 
-  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService) { }
+  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
+              private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id'); //Use for specific keys later
+    this.id = this.route.snapshot.paramMap.get('id');
     this.itemsRef = this.db.list('incidents/' + this.id + '/markers');
     this.items = this.itemsRef.snapshotChanges().map(changes => {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
@@ -85,8 +101,21 @@ export class IncidentComponent implements OnInit {
 
 
 
+    if (this.directionsEnabled) {
+      this.directionsRendererDirective['initialized$'].subscribe( directionsRenderer => {
+        this.directionsRenderer = directionsRenderer;
+      });
+    }
   }
 
+  directionsChanged() {
+    this.directionsResult = this.directionsRenderer.getDirections();
+    this.cdr.detectChanges();
+  }
+
+  showDirection() {
+    this.directionsRendererDirective['showDirections'](this.direction);
+  }
 
   mapClicked($event: any) {
     this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
