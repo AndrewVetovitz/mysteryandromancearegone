@@ -81,6 +81,15 @@ export class IncidentComponent implements OnInit {
 
   realTimePosition: any;
 
+  markers;
+
+  currentPinText = '';
+  currentTeamPin = '';
+
+  dco = {
+  position: 2,
+  drawingModes: ['marker','circle', 'polygon']
+  };
   constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
               private cdr: ChangeDetectorRef) { }
 
@@ -112,9 +121,8 @@ export class IncidentComponent implements OnInit {
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
     this.polygonsHandler = polygons.valueChanges();
 
-    let markers = this.db.list('incidents/' + this.id + '/markers');
-    this.markersHandler = markers.valueChanges();
-    this.markersHandler.subscribe(r => console.log(r));
+    this.markers = this.db.list('incidents/' + this.id + '/markers');
+    this.markersHandler = this.markers.valueChanges();
 
     const circles = this.db.list('incidents/' + this.id + '/circles');
     this.circlesHandler = circles.valueChanges();
@@ -164,10 +172,15 @@ export class IncidentComponent implements OnInit {
           dm.setDrawingMode(null);
               console.log(event);
 
-          // let newPin = {lat: event.overlay.position.lat(), lng: event.overlay.position.lng()};
-          let newPin = [event.overlay.position.lat(), event.overlay.position.lng()];
+          if(this.currentTeamPin == ''){
+            this.currentTeamPin = 'paramedics'
+          }
+          if(this.currentPinText == ''){
+            this.currentPinText = 'A person is seriously harmed';
+          }
+          let newPin = {description: this.currentPinText, team: this.currentTeamPin, pos:[event.overlay.position.lat(), event.overlay.position.lng()]};
 
-          markers.push(newPin);
+          this.markers.push(newPin);
         }
 
         event.overlay.setMap(null);
@@ -190,7 +203,8 @@ export class IncidentComponent implements OnInit {
   }
 
   quickAddPin(team, quick) {
-
+    this.currentPinText = quick;
+    this.currentTeamPin = team;
   }
 
   initialized(autocomplete: any) {

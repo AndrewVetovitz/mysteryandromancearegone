@@ -33,10 +33,7 @@
       <drawing-manager id="draw"
                        [drawingMode]="'stop'"
                        [drawingControl]="true"
-                       [drawingControlOptions]="{
-          position: 2,
-          drawingModes: ['marker', 'circle', 'polygon']
-         }">
+                       [drawingControlOptions]="dco">
 
       </drawing-manager>
 
@@ -64,15 +61,21 @@
                           [directions-request]="direction">
     </directions-renderer>
 
-    <marker *ngFor="let pos of markersHandler | async" [position]="pos" (click)="clicked($event)">
-      <info-window id="iw">
-        <b>{{pos}}</b>
-      </info-window>
-    </marker>
+    <!--<marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">-->
+      <!--<info-window id="iw">-->
+        <!--<b>{{marker.description}}</b>-->
+      <!--</info-window>-->
+    <!--</marker>-->
 
-    <!--<custom-marker *ngFor="let pos of markersHandler | async" [position]="pos">-->
-      <!--<div class="custom-icon">test</div>-->
-    <!--</custom-marker>-->
+    <custom-marker *ngFor="let marker of markersHandler | async" [position]="marker.pos" (click)="clicked($event)">
+      <div *ngIf="marker.team.name == 'Police'" class="custom-icon"></div>
+      <div *ngIf="marker.team.name == 'paramedics'" class="custom-icon1"></div>
+      <div *ngIf="marker.team.name == 'FireDept'" class="custom-icon2"></div>
+      <div *ngIf="marker.team.name == 'lifeguard'" class="custom-icon3"></div>
+      <info-window id="iw">
+        <b>{{marker.description}}</b>
+      </info-window>
+    </custom-marker>
 
     <!--<custom-marker *ngFor="let rtl of realTimePosition | async" [position]="rtl.pos">-->
       <!--<div>-->
