@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
+import { DirectionsRenderer } from '@ngui/map';
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from 'rxjs/Observable';
 import {ActivatedRoute} from "@angular/router";
@@ -21,10 +22,24 @@ export class IncidentComponent implements OnInit {
 
   // Name and start point of the map
   title: string = 'My first AGM project';
-  lat: number = 51.678418;
-  lng: number = 7.809007;
-  origin: string = '75 9th Ave, New York, NY';
-  destination: string = '715 Wedgewood Dr. Marysville, OH';
+  @ViewChild(DirectionsRenderer) directionsRendererDirective: DirectionsRenderer;
+
+  directionsEnabled = false;
+  directionsRenderer: google.maps.DirectionsRenderer;
+  directionsResult: google.maps.DirectionsResult;
+  direction: any = {
+    origin: 'penn station, new york, ny',
+    destination: '260 Broadway New York NY 10007',
+    travelMode: 'WALKING'};
+
+  mapOptions = {
+    zoom: 14,
+    mapTypeId: 'roadmap'
+  };
+
+  mapInfo: any = {};
+
+  currentPos: string;
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
@@ -43,12 +58,18 @@ export class IncidentComponent implements OnInit {
   //DONT REALLY USE THESE NOT ASYNC SO NOT ALWAYS GOING TO GET THEM
   userInfo;
   orgInfo;
-  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService) { }
+
+  markersHandler: Observable<any>;
+
+  constructor(private route: ActivatedRoute, public db: AngularFireDatabase, private afs: AngularFirestore, public auth: AuthService,
+              private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.auth.user.subscribe(user => this.userInfo = user);
+      this.auth.user.subscribe(user => this.userInfo = user);
 
-    this.id = this.route.snapshot.paramMap.get('id'); //Use for specific keys later
+      this.id = this.route.snapshot.paramMap.get('id'); //Use for specific keys later
+
+    this.id = this.route.snapshot.paramMap.get('id');
     this.itemsRef = this.db.list('incidents/' + this.id + '/markers');
     this.items = this.itemsRef.snapshotChanges().map(changes => {
       return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
@@ -64,6 +85,15 @@ export class IncidentComponent implements OnInit {
 
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
     this.polygonsHandler = polygons.valueChanges();
+
+    //   .map(changes => {
+    //   return changes.map(c => (
+    //     {points: [[c.payload.val().points]]})
+    //   );
+    // });
+    // let markers = this.db.list('incidents/' + this.id + '/markers');
+    // this.markersHandler = markers.valueChanges();
+
     this.polygonsHandler.subscribe(res =>
     {console.log(res)} );
 
@@ -111,12 +141,29 @@ export class IncidentComponent implements OnInit {
             });
             let newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
             polygons.push(newPoly);
+        } else if(event.type === google.maps.drawing.OverlayType.MARKER) {
+          dm.setDrawingMode();
         }
       });
     });
 
+
+
+    if (this.directionsEnabled) {
+      this.directionsRendererDirective['initialized$'].subscribe( directionsRenderer => {
+        this.directionsRenderer = directionsRenderer;
+      });
+    }
   }
 
+  directionsChanged() {
+    this.directionsResult = this.directionsRenderer.getDirections();
+    this.cdr.detectChanges();
+  }
+
+  showDirection() {
+    this.directionsRendererDirective['showDirections'](this.direction);
+  }
 
   mapClicked($event: any) {
     this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
