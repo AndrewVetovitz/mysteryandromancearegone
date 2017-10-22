@@ -1,7 +1,7 @@
 <h1>{{ (org | async)?.name }}</h1>
 
 <div class="full-map">
-  <ngui-map zoom="8" center="-34.397, 150.644">
+  <ngui-map [options]="mapOptions">
     <drawing-manager id="draw"
                      [drawingMode]="'marker'"
                      [drawingControl]="true"

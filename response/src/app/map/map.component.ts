@@ -9,11 +9,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class MapComponent implements OnInit {
 
+  mapOptions = {
+    zoom: 14,
+    mapTypeId: 'roadmap'
+  };
+
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log(window.outerHeight);
-    console.log(window.outerWidth);
   }
 
 }
