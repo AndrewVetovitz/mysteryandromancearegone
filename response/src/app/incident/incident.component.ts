@@ -255,7 +255,7 @@ export class IncidentComponent implements OnInit {
     }
   }
 
-  shape;
+  shape: number;
 
   setPolygon(poly) {
     this.deletePoly = poly;
@@ -295,12 +295,8 @@ export class IncidentComponent implements OnInit {
         break;
       }
       case 2: {
-        if(this.deletePoly.color != '#95a5a6'){
-          this.markers.update(this.deletePoly.key, { color: '#95a5a6' });
-        }else{
           this.markers.remove(this.deletePoly.key);
           this.deletePoly = null;
-        }
       }
       break;
     }
