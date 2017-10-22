@@ -1,24 +1,29 @@
 <h1>{{ (org | async)?.name }}</h1>
 
-<ngui-map zoom="8" center="-34.397, 150.644"
-          (mapClick)="onMapClick($event)">
-  <drawing-manager id="draw"
-    [drawingMode]="'marker'"
-    [drawingControl]="true"
-    [drawingControlOptions]="{
-          position: 2,
-          drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
-         }"
-    [circleOptions]="{
-          fillColor: '#ffff00',
-          fillOpacity: 1,
-          strokeWeight: 5,
-          editable: true,
-          zIndex: 1
-        }">
-  </drawing-manager>
-  <marker *ngFor="let pos of positions"
-          [position]="pos"
-          (initialized$)="onMarkerInit($event)">
-  </marker>
-</ngui-map>
+<div class="map-container">
+  <ngui-map zoom="8" center="-34.397, 150.644">
+    <drawing-manager id="draw"
+      [drawingMode]="'marker'"
+      [drawingControl]="true"
+      [drawingControlOptions]="{
+            position: 2,
+            drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+           }"
+      [circleOptions]="{
+            fillColor: '#ffff00',
+            fillOpacity: 1,
+            strokeWeight: 5,
+            editable: true,
+            zIndex: 1
+          }">
+    </drawing-manager>
+    <polygon *ngFor="let poly of polygonsHandler | async" [paths]="poly.points"
+             [strokeColor]="'#FFC107'"
+             [strokeOpacity]="0.8"
+             [strokeWeight]="2"
+             [fillColor]="'#FFC107'"
+             [fillOpacity]="0.35">
+    </polygon>
+    <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
+  </ngui-map>
+</div>

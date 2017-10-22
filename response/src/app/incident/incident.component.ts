@@ -28,6 +28,9 @@ export class IncidentComponent implements OnInit {
   incident;
   org: Observable<Org>;
 
+  polygonsHandler: Observable<any>;
+  markersHandler: Observable<any>;
+
   selectedOverlay: any;
   @ViewChild(DrawingManager) drawingManager: DrawingManager;
 
@@ -43,10 +46,20 @@ export class IncidentComponent implements OnInit {
     this.incident = this.db.object('incidents/' + this.id );
     this.incident.valueChanges().subscribe(doc => {
       this.org = this.afs.doc('org/' + doc.orgId).valueChanges();
-
     });
 
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
+    this.polygonsHandler = polygons.valueChanges();
+    //   .map(changes => {
+    //   return changes.map(c => (
+    //     {points: [[c.payload.val().points]]})
+    //   );
+    // });
+    // let markers = this.db.list('incidents/' + this.id + '/markers');
+    // this.markersHandler = markers.valueChanges();
+
+    this.polygonsHandler.subscribe(res =>
+    {console.log(res)} );
 
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
@@ -58,20 +71,22 @@ export class IncidentComponent implements OnInit {
             console.log(event.overlay.getPath().getArray());
             let points = [];
             event.overlay.getPath().getArray().forEach(point => {
-              points.push([point.lat(), point.lng()])
+              points.push({lat :  point.lat(), lng : point.lng()})
             });
-            let newPoly = { points : points};
+            let newPoly = { points :points };
             polygons.push(newPoly);
           });
           this.selectedOverlay = event.overlay;
+        } else if(event.type === google.maps.drawing.OverlayType.MARKER) {
+          dm.setDrawingMode();
         }
       });
     });
+
+
+
   }
 
-  onMapClick($event) {
-    console.log($event);
-  }
 
   mapClicked($event: any) {
     this.addItem({lat: $event.coords.lat, lng: $event.coords.lng, draggable: true});
