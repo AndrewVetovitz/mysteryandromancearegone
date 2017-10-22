@@ -7,7 +7,6 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../environments/environment';
-import { AgmCoreModule } from '@agm/core';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
@@ -17,6 +16,7 @@ import { AuthService } from './auth.service';
 import { RoutePlannerDirective } from './incident/route-planner.directive';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInputModule, MatDialogModule, MatCardModule, MatSelectModule } from '@angular/material';
+import { NguiMapModule} from '@ngui/map';
 
 const routes: Routes = [
   {
@@ -54,10 +54,7 @@ const routes: Routes = [
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule,
-    AgmCoreModule.forRoot({
-      apiKey:'AIzaSyD5EJm6eWsMbdS_9cgkV1hqXR0QEEDxZ_c',
-      libraries: ['places']
-    }),
+    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyD5EJm6eWsMbdS_9cgkV1hqXR0QEEDxZ_c'}),
     BrowserAnimationsModule,
     MatSidenavModule,
     MatIconModule,
