@@ -28,6 +28,8 @@ export class IncidentComponent implements OnInit {
   incident;
   org: Observable<Org>;
 
+  polygonsHandler: Observable<any>;
+
   selectedOverlay: any;
   @ViewChild(DrawingManager) drawingManager: DrawingManager;
 
@@ -47,8 +49,14 @@ export class IncidentComponent implements OnInit {
     });
 
     let polygons = this.db.list('incidents/' + this.id + '/polygons');
-
-
+    this.polygonsHandler = polygons.valueChanges()
+    //   .map(changes => {
+    //   return changes.map(c => (
+    //     {points: [[c.payload.val().points]]})
+    //   );
+    // });
+    this.polygonsHandler.subscribe(res =>
+    {console.log(res)} );
 
     this.drawingManager['initialized$'].subscribe(dm => {
       google.maps.event.addListener(dm, 'overlaycomplete', event => {
@@ -60,9 +68,9 @@ export class IncidentComponent implements OnInit {
             console.log(event.overlay.getPath().getArray());
             let points = [];
             event.overlay.getPath().getArray().forEach(point => {
-              points.push([point.lat(), point.lng()])
+              points.push({lat :  point.lat(), lng : point.lng()})
             });
-            let newPoly = { points : points};
+            let newPoly = { points :points };
             polygons.push(newPoly);
           });
           this.selectedOverlay = event.overlay;
