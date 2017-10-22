@@ -144,6 +144,10 @@ export class IncidentComponent implements OnInit {
         } else if(event.type === google.maps.drawing.OverlayType.MARKER) {
           dm.setDrawingMode();
         }
+
+        event.overlay.setMap(null);
+        delete event.overlay;
+
       });
     });
 
