@@ -100,9 +100,8 @@ export class IncidentComponent implements OnInit {
       this.getCurrentPos(); },1000);
 
 
-    let rtl = this.db.list('incidents/' + this.id + '/locations');
-    this.realTimePosition = rtl.valueChanges().subscribe(res => console.log(res));
-
+    // let rtl = this.db.list('incidents/' + this.id + '/locations');
+    // this.realTimePosition = rtl.valueChanges().subscribe(res => console.log(res));
 
     this.incident = this.db.object('incidents/' + this.id );
     this.incident.valueChanges().subscribe(doc => {
@@ -219,7 +218,7 @@ export class IncidentComponent implements OnInit {
           position.coords.latitude,
           position.coords.longitude
         ];
-        this.myLocation.update({pos:pos,image:this.userPicURL});
+        // this.myLocation.update({pos:pos,image:this.userPicURL});
 
         return pos;
       }, function() {
@@ -230,6 +229,12 @@ export class IncidentComponent implements OnInit {
       console.log('dad doesnt have internet');
     }
   }
+
+  clicked({target: marker}) {
+
+    marker.nguiMapComponent.openInfoWindow('iw', marker);
+  }
+
 
 }
 

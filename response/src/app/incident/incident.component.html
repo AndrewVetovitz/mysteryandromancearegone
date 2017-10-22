@@ -24,7 +24,7 @@
 <div class="map-container">
   <ngui-map [options]="mapOptions">
       <drawing-manager id="draw"
-                       [drawingMode]="'marker'"
+                       [drawingMode]="'stop'"
                        [drawingControl]="true"
                        [drawingControlOptions]="{
           position: 2,
@@ -57,12 +57,15 @@
                           [directions-request]="direction">
     </directions-renderer>
 
-    <marker *ngFor="let pos of markersHandler | async" [position]="pos">
+    <marker *ngFor="let pos of markersHandler | async" [position]="pos" (click)="clicked($event)">
+      <info-window id="iw">
+        <b>{{pos}}</b>
+      </info-window>
     </marker>
 
-    <custom-marker *ngFor="let pos of markersHandler | async" [position]="pos">
-      <div class="custom-icon">test</div>
-    </custom-marker>
+    <!--<custom-marker *ngFor="let pos of markersHandler | async" [position]="pos">-->
+      <!--<div class="custom-icon">test</div>-->
+    <!--</custom-marker>-->
 
     <!--<custom-marker *ngFor="let rtl of realTimePosition | async" [position]="rtl.pos">-->
       <!--<div>-->
