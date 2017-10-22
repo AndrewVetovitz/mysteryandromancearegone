@@ -7,6 +7,7 @@ import { AngularFireDatabase, AngularFireList } from "angularfire2/database";
 import { Org } from "../org/org.component";
 import { AuthService } from "../auth.service";
 import { DrawingManager } from '@ngui/map';
+import { ElementRef } from '@angular/core';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -24,19 +25,31 @@ export class IncidentComponent implements OnInit {
   // Name and start point of the map
   title: string = 'My first AGM project';
   @ViewChild(DirectionsRenderer) directionsRendererDirective: DirectionsRenderer;
-  autocomplete: google.maps.places.Autocomplete;
+  autocomplete: any;
   address: any = {};
+  center: any;
+  d = false;
   directionsEnabled = false;
   directionsRenderer: google.maps.DirectionsRenderer;
   directionsResult: google.maps.DirectionsResult;
   direction: any = {
-    origin: 'penn station, new york, ny',
-    destination: '260 Broadway New York NY 10007',
-    travelMode: 'WALKING'};
+    origin: '',
+    destination: '',
+    travelMode: 'DRIVING'};
 
   mapOptions = {
     zoom: 14,
     mapTypeId: 'roadmap'
+  };
+
+  placeSearch;
+  componentForm = {
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_1: 'short_name',
+    country: 'long_name',
+    postal_code: 'short_name'
   };
 
   mapInfo: any = {};
@@ -87,9 +100,8 @@ export class IncidentComponent implements OnInit {
       this.getCurrentPos(); },1000);
 
 
-    let rtl = this.db.list('incidents/' + this.id + '/locations');
-    this.realTimePosition = rtl.valueChanges().subscribe(res => console.log(res));
-
+    // let rtl = this.db.list('incidents/' + this.id + '/locations');
+    // this.realTimePosition = rtl.valueChanges().subscribe(res => console.log(res));
 
     this.incident = this.db.object('incidents/' + this.id );
     this.incident.valueChanges().subscribe(doc => {
@@ -163,11 +175,9 @@ export class IncidentComponent implements OnInit {
       });
     });
 
-    if (this.directionsEnabled) {
       this.directionsRendererDirective['initialized$'].subscribe( directionsRenderer => {
         this.directionsRenderer = directionsRenderer;
       });
-    }
   }
 
   directionsChanged() {
@@ -186,10 +196,10 @@ export class IncidentComponent implements OnInit {
   initialized(autocomplete: any) {
     this.autocomplete = autocomplete;
   }
-  placeChanged() {
-    let place = this.autocomplete.getPlace();
+  placeChanged(place) {
+    this.center = place.geometry.location;
     for (let i = 0; i < place.address_components.length; i++) {
-      const addressType = place.address_components[i].types[0];
+      let addressType = place.address_components[i].types[0];
       this.address[addressType] = place.address_components[i].long_name;
     }
     this.cdr.detectChanges();
@@ -207,7 +217,7 @@ export class IncidentComponent implements OnInit {
           position.coords.latitude,
           position.coords.longitude
         ];
-        this.myLocation.update({pos:pos,image:this.userPicURL});
+        // this.myLocation.update({pos:pos,image:this.userPicURL});
 
         return pos;
       }, function() {
@@ -223,7 +233,6 @@ export class IncidentComponent implements OnInit {
 
     marker.nguiMapComponent.openInfoWindow('iw', marker);
   }
-
 
 
 }

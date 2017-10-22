@@ -61,7 +61,7 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule,
-    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyD5EJm6eWsMbdS_9cgkV1hqXR0QEEDxZ_c&libraries=drawing,visualization'}),
+    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyD5EJm6eWsMbdS_9cgkV1hqXR0QEEDxZ_c&libraries=drawing,visualization,places'}),
     BrowserAnimationsModule,
     MatSidenavModule,
     MatIconModule,

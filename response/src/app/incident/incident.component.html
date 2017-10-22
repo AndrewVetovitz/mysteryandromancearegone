@@ -13,17 +13,20 @@
 
 <div id="floating-panel">
   <b>Start: </b>
-  <select [ngModel]="direction.origin"
-          (ngModelChange)="direction.origin = $event; showDirection()">
-    <option [ngValue]="'penn station, new york, ny'">Penn Station</option>
-    <option [ngValue]="'grand central station, new york, ny'">Grand Central Station</option>
-  </select>
+  <input #originInput places-auto-complete
+         (initialized$)="initialized($event)"
+         (place_changed)="placeChanged($event)"
+         [ngModel]="direction.origin"
+         (ngModelChange)="direction.origin = $event;"
+         [types]="['geocode']" />
   <b>End: </b>
-  <select [ngModel]="direction.destination"
-          (ngModelChange)="direction.destination = $event; showDirection()">
-    <option [ngValue]="'260 Broadway New York NY 10007'">City Hall</option>
-    <option [ngValue]="'W 49th St & 5th Ave, New York, NY 10020'">Rockefeller Center</option>
-  </select>
+  <input  #destinationInput places-auto-complete
+         (initialized$)="initialized($event)"
+         (place_changed)="placeChanged($event)"
+         [ngModel]="direction.destination"
+         (ngModelChange)="direction.destination = $event;"
+         [types]="['geocode']" />
+  <button (click)="direction.destination=destinationInput.value;direction.origin=originInput.value;showDirection()">Show Directions</button>
 </div>
 <div class="map-container">
   <ngui-map [options]="mapOptions">
@@ -54,7 +57,7 @@
               draggable="false"></circle>
 
       <!--<marker *ngFor="let pos of positions | async" [position]="pos"></marker>-->
-    <directions-renderer  *ngIf="editingUser"
+    <directions-renderer
                           [suppressMarkers]="true"
                           [draggable]="true"
                           (directions_changed)="directionsChanged()"
