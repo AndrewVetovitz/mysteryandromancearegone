@@ -37,8 +37,9 @@ mat-card-footer {
 }
 
 .icon-space {
-  /*font-size: 26px;*/
-  /*margin: 0 3.75em 0 0;*/
+  font-size: 25px;
+  margin: 0 29px -1px 7px;
+  color: #0091ea;
 }
 
 .content {
@@ -57,4 +58,8 @@ mat-card-title {
   .pull-right.bottom-pad {
     bottom: 14px !important;
   }
+}
+
+.pan-pad {
+  padding: -10px;
 }
