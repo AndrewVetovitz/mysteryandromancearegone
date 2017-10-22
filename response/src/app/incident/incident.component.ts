@@ -82,9 +82,11 @@ export class IncidentComponent implements OnInit {
   realTimePosition: any;
 
   markers;
-
+  polygons;
   currentPinText = '';
   currentTeamPin = {name:''};
+
+  deletePoly = false;
 
   dco = {
   position: 2,
@@ -118,9 +120,12 @@ export class IncidentComponent implements OnInit {
       this.org.subscribe( res =>{ this.orgInfo = res;})
     });
 
-    let polygons = this.db.list('incidents/' + this.id + '/polygons');
-    this.polygonsHandler = polygons.valueChanges();
-
+    this.polygons = this.db.list('incidents/' + this.id + '/polygons');
+    // this.polygonsHandler = polygons.valueChanges();
+    this.polygonsHandler = this.polygons.snapshotChanges().map(changes => {
+      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+    });
+    this.polygonsHandler.subscribe( res => {console.log(res)});
     this.markers = this.db.list('incidents/' + this.id + '/markers');
     this.markersHandler = this.markers.valueChanges();
 
@@ -143,7 +148,7 @@ export class IncidentComponent implements OnInit {
               points.push({lat :  point.lat(), lng : point.lng()});
             });
             const newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
-            polygons.push(newPoly);
+            this.polygons.push(newPoly);
           this.selectedOverlay = event.overlay;
         }else if(event.type === google.maps.drawing.OverlayType.CIRCLE){
           dm.setDrawingMode(null);
@@ -167,7 +172,7 @@ export class IncidentComponent implements OnInit {
               points.push({lat :  point.lat(), lng : point.lng()});
             });
             let newPoly = { points :points, color: this.colors[this.userInfo.OrgIds['nO2epGylHwK2A8CZK614']] };
-            polygons.push(newPoly);
+            this.polygons.push(newPoly);
         } else if (event.type === google.maps.drawing.OverlayType.MARKER) {
           dm.setDrawingMode(null);
               console.log(event);
@@ -243,6 +248,16 @@ export class IncidentComponent implements OnInit {
       // Browser doesn't support Geolocation
       console.log('dad doesnt have internet');
     }
+  }
+
+  deletePolygon(key: string) {
+    console.log(key);
+    this.deletePoly = true;
+  }
+
+  deletePolygon(key: string) {
+    console.log(key);
+    this.polygons.remove(key);
   }
 
   clicked({target: marker}) {

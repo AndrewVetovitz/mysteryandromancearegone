@@ -32,10 +32,12 @@
       </drawing-manager>
 
       <polygon *ngFor="let poly of polygonsHandler | async" [paths]="poly.points"
+               (click)="setPolygon(poly.key)"
                [strokeColor]="poly.color"
                [strokeOpacity]="0.8"
                [strokeWeight]="2"
                [fillColor]="poly.color"
+               [clickable[="true"
                [fillOpacity]="0.35"></polygon>
 
       <circle *ngFor="let circle of circlesHandler | async" [center]="circle.center"
