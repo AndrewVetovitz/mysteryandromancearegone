@@ -71,7 +71,7 @@ mat-sidenav {
 
 /* The element to apply the animation to */
 .menu {
-  position: sticky;
+  left: -25px;
 }
 
 .menu-icon {

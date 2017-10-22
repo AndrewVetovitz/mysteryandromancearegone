@@ -1,7 +1,37 @@
-.ngui-map {
-  height: 80vh;
-  width: 80vw;
+.angular-google-map,
+.my-map .angular-google-map-container {
+  width: 100%;
+  height: 100%;
 }
+
+.full-map {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+ngui-map {
+  height: 90vh;
+  width: 78vw;
+}
+
+@media (max-width: 500px) {
+  .angular-google-map,
+  .my-map .angular-google-map-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .full-map {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  ngui-map {
+    height: 90vh;
+    width: 92vw;
+  }
+}
+
 .custom-icon {
   width: 30px;
   height: 30px;
@@ -44,4 +74,21 @@
   color:white;
   font-size:10px;
   text-align:center;
+}
+
+.add-member {
+  background-color: #0091ea;
+}
+
+.content {
+  background-color: #a7c0cd;
+}
+
+.align {
+  top: -5px;
+  margin: 0 1em 0 1em;
+}
+
+.space {
+  margin-top: 5em;
 }

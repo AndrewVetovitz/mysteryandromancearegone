@@ -77,7 +77,8 @@ export class OrgComponent implements OnInit {
 
   addTeam(name: string) {
     this.orgCopy.teams.push({name: name, premadePins: []});
-    this.orgRef.update(this.orgCopy).then( r => {this.newTeamName = '';});
+    this.orgRef.update(this.orgCopy).then( r => {this.newTeamName = '';
+    });
   }
 
   addPin(text: string, index: number) {
@@ -88,7 +89,7 @@ export class OrgComponent implements OnInit {
   addIncident() {
     this.incidentsRef.push({name: this.newIncident, orgId: this.id}).then((item) => {
       this.newIncident = '';
-    })
+    });
   }
 
 }
