@@ -249,6 +249,10 @@ export class IncidentComponent implements OnInit {
     marker.nguiMapComponent.openInfoWindow('iw', marker);
   }
 
+  clearDirection () {
+    this.directionsRenderer.setMap(null);
+  }
+
 
 }
 
