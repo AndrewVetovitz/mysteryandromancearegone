@@ -12,8 +12,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
 import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
+import { MapComponent } from './map/map.component';
 import { AuthService } from './auth.service';
-import { NguiMapModule} from '@ngui/map';
+import { NguiMapModule } from '@ngui/map';
 
 const routes: Routes = [
   {
@@ -29,8 +30,12 @@ const routes: Routes = [
     component: IncidentComponent
   },
   {
+    path: 'map',
+    component: MapComponent
+  },
+  {
     path: '**',
-    component: ProfileComponent
+    component: OrgComponent
   }
 ];
 
@@ -44,7 +49,8 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     AppComponent,
     OrgComponent,
     ProfileComponent,
-    IncidentComponent
+    IncidentComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +61,7 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFireDatabaseModule,
-    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyD5EJm6eWsMbdS_9cgkV1hqXR0QEEDxZ_c&libraries=drawing'}),
+    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyD5EJm6eWsMbdS_9cgkV1hqXR0QEEDxZ_c&libraries=drawing,visualization'}),
     BrowserAnimationsModule,
     MatSidenavModule,
     MatIconModule,
@@ -67,7 +73,8 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     MatSelectModule,
     MatCardModule,
     MatTableModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSelectModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

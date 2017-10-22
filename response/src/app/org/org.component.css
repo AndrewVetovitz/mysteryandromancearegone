@@ -16,11 +16,8 @@ mat-card-footer {
   margin-right: 2em;
 }
 
-.font-white {
-  color: #ffffff;
-}
-
 .prof-img {
+  border-radius: 100%;
   margin-right: 1em;
   height:40px;
   width:40px;
