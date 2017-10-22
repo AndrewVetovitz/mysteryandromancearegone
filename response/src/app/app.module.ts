@@ -12,9 +12,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrgComponent } from './org/org.component';
 import { ProfileComponent } from './profile/profile.component';
 import { IncidentComponent } from './incident/incident.component';
+import { MapComponent } from './map/map.component';
 import { AuthService } from './auth.service';
 import { RoutePlannerDirective } from './incident/route-planner.directive';
-import { NguiMapModule} from '@ngui/map';
+import { NguiMapModule } from '@ngui/map';
 
 const routes: Routes = [
   {
@@ -30,8 +31,12 @@ const routes: Routes = [
     component: IncidentComponent
   },
   {
+    path: 'map',
+    component: MapComponent
+  },
+  {
     path: '**',
-    component: ProfileComponent
+    component: OrgComponent
   }
 ];
 
@@ -46,7 +51,8 @@ import { MatSidenavModule, MatIconModule, MatButtonModule, MatListModule, MatInp
     OrgComponent,
     ProfileComponent,
     IncidentComponent,
-    RoutePlannerDirective
+    RoutePlannerDirective,
+    MapComponent
   ],
   imports: [
     BrowserModule,
